@@ -44,12 +44,47 @@ footer{border-top:1px solid var(--line);padding:26px 24px 40px}
   .mark .word{animation:none;opacity:1}
 }
 @media (max-width:560px){ main{padding:48px 20px} }
+
+/* ── 상품 ── */
+main{display:block}
+.top{min-height:auto;padding:72px 24px 56px;display:flex;justify-content:center}
+.goods{border-top:1px solid var(--line);padding:64px 24px 76px;background:#fff}
+.goods .in{max-width:1080px;margin:0 auto}
+.goods h2{font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.04em}
+.ghead{margin-top:10px;font-size:15px;color:var(--ink-2);max-width:60ch}
+.grid{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;background:#fff}
+.thumb{background:var(--page);aspect-ratio:1/1.35;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1}
+.eyeb{font-size:12.5px;font-weight:800;color:var(--accent);letter-spacing:-.01em}
+.card h3{margin-top:7px;font-size:16.5px;font-weight:700;letter-spacing:-.025em;line-height:1.4}
+.vol{display:inline-block;margin-left:7px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.ing{margin-top:9px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.price{margin-top:16px;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}
+.price b{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.price span{font-size:15px;font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+.pending{margin-left:8px;font-size:12px;font-weight:700;color:var(--accent);
+  background:#FDECE7;border-radius:999px;padding:3px 9px;align-self:center}
+.ship{margin-top:6px;font-size:13px;color:var(--ink-3)}
+.card details{margin-top:16px;border-top:1px solid var(--line);padding-top:13px}
+.card summary{font-size:13.5px;font-weight:700;color:var(--ink-2);cursor:pointer;list-style:none}
+.card summary::-webkit-details-marker{display:none}
+.card summary::before{content:"+ ";color:var(--accent);font-weight:800}
+.card details[open] summary::before{content:"- "}
+.card table{width:100%;border-collapse:collapse;margin-top:11px;font-size:11.5px;line-height:1.65}
+.card th,.card td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.card th{background:var(--page);font-weight:700;width:32%;color:var(--ink-2)}
+.disc{margin-top:26px;font-size:12.5px;color:var(--ink-3)}
+@media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:600px){ .grid{grid-template-columns:1fr} .goods{padding:48px 20px 60px} }
 </style>
 </head>
 <body>
 
 <main>
-  <div class="in">
+  <div class="top"><div class="in">
     <svg class="mark" viewBox="0 8 310 80" width="215" role="img" aria-label="ODEAL">
       <circle class="ring" cx="35" cy="48" r="26.5" fill="none" stroke="#E8380D" stroke-width="17"
               transform="rotate(-90 35 48)"/>
@@ -63,7 +98,90 @@ footer{border-top:1px solid var(--line);padding:26px 24px 40px}
     <div class="state"><i></i>오픈 준비 중</div>
 
     <p class="contact">입점·제휴 문의는 <a href="mailto:hello@odeal.co.kr">hello@odeal.co.kr</a></p>
+  </div></div>
+<!--GOODS-->
+<section class="goods" id="goods">
+  <div class="in">
+    <h2>먼저 여는 것</h2>
+    <p class="ghead">주식회사 와이엘트레이딩이 공급하는 파머시안 3종입니다. 표시사항은 제품 표기를 그대로 옮겼습니다.</p>
+    <div class="grid">
+      <article class="card">
+        <div class="thumb"><img src="img/pdrn7000.jpg" alt="파머시안 PDRN 7000 크림 제품 이미지" loading="lazy" width="1000" height="1792"></div>
+        <div class="body">
+          <p class="eyeb">연어 PDRN 7,000ppm</p>
+          <h3>파머시안 PDRN 7000 크림<span class="vol">30g</span></h3>
+          <p class="ing">소듐디엔에이 7,000ppm · 락토바실러스세포외소포 5,580ppm</p>
+          <div class="price"><b class="num">20,000</b><span>원</span></div>
+          <p class="ship">배송비 3,000원 · 오픈 시 결제 가능</p>
+          <details>
+            <summary>상품정보 제공고시 · 전성분</summary>
+            <table><tr><th>제품명</th><td>파머시안 피디알엔 7000 크림<br>(PHARMACIAN PDRN 7000 CREAM)</td></tr>
+<tr><th>용량</th><td>30g(1.05oz.)</td></tr>
+<tr><th>피부타입</th><td>모든 피부</td></tr>
+<tr><th>사용기한</th><td>별도표기</td></tr>
+<tr><th>용법용량</th><td>본품 적당량을 취해 피부에 골고루 펴 바른다.</td></tr>
+<tr><th>효능효과</th><td>피부의 미백에 도움을 준다. 피부의 주름개선에 도움을 준다.</td></tr>
+<tr><th>전성분</th><td>정제수, 다이프로필렌글라이콜, 글리세린, 부틸렌글라이콜, 카프릴릴메티콘, 1,2-헥산다이올, 나이아신아마이드, 베타인, 판테놀, 하이드로제네이티드폴리데센, 소듐디엔에이(7000ppm), 세테아릴올리베이트, C14-22알코올, 락토바실러스세포외소포(5580ppm), 효모세포외소포(5580ppm), 솔비탄올리베이트, 알란토인(3000ppm), 암모늄아크릴로일다이메틸타우레이트/브이피코폴리머, 유청여과물, 카보머, 카프릴릭/카프릭트라이글리세라이드, 트로메타민, C12-20알킬글루코사이드, 푸코실락토오스, 에틸헥실글리세린, 우유엑소좀(600ppm), 토코페릴아세테이트, 세라마이드엔피, 아데노신, 피토스테롤, 올레익애씨드, 하이드로제네이티드레시틴, 다이소듐이디티에이, 글리세릴스테아레이트, 레몬껍질오일, 베르가모트오일, 칸디다 봄비콜라/글루코오스/메틸레이프씨데이트발효물, 세테아릴알코올, 리씨열매오일, 스테아릭애씨드, 폴리글리세릴-3메틸글루코오스다이스테아레이트, 발삼아미리스껍질오일, 소두구씨오일, 연필향나무오일, 모란뿌리추출물, 쌀배아오일, 코코넛야자오일, 프로판다이올, 클레리오일, 사철쑥추출물, 타임꽃/잎오일, 올리브추출물</td></tr>
+<tr><th>화장품제조업자</th><td>린제이앤코스 주식회사 / 경기도 포천시 군내면 용정경제로1길 94-63 나동</td></tr>
+<tr><th>화장품책임판매업자</th><td>(주)와이엘트레이딩 / 경기도 안양시 동안구 시민대로 401, 2001호(관양동, 대륭테크노타운15차)</td></tr>
+<tr><th>소비자상담실</th><td>02-6177-7350</td></tr>
+<tr><th>주의사항</th><td>화장품 사용 시 또는 사용 직후 직사광선에 의하여 사용부위가 붉은 반점, 부어오름 또는 가려움증 등의 이상 증상이나 부작용이 있는 경우에는 전문의 등과 상담해주세요.<br>상처가 있는 부위 등에는 사용을 자제해주세요.<br>어린이의 손이 닿지 않는 곳에 보관해주세요.<br>직사광선을 피해서 보관해주세요.</td></tr></table>
+          </details>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb"><img src="img/melaless.jpg" alt="파머시안 멜라리스 100,000 크림 제품 이미지" loading="lazy" width="1000" height="1792"></div>
+        <div class="body">
+          <p class="eyeb">미백 기능성 크림</p>
+          <h3>파머시안 멜라리스 100,000 크림<span class="vol">30g</span></h3>
+          <p class="ing">나이아신아마이드 · 트라넥사믹애씨드 · 3-O-에틸아스코빅애씨드</p>
+          <div class="price"><b class="num">23,000</b><span>원</span><span class="pending">가격 확정 전</span></div>
+          <p class="ship">배송비 3,000원 · 오픈 시 결제 가능</p>
+          <details>
+            <summary>상품정보 제공고시 · 전성분</summary>
+            <table><tr><th>제품명</th><td>브이씨엑소 파머시안 멜라리스 10만 크림<br>(VCXO PHARMACIAN MELALESS 100,000 CREAM)</td></tr>
+<tr><th>용량</th><td>30g</td></tr>
+<tr><th>피부타입</th><td>모든 피부</td></tr>
+<tr><th>사용기한</th><td>별도표기</td></tr>
+<tr><th>용법용량</th><td>본품 적당량을 취해 피부에 골고루 펴 바른다.</td></tr>
+<tr><th>효능효과</th><td>피부의 미백에 도움을 준다. 피부의 주름개선에 도움을 준다.</td></tr>
+<tr><th>전성분</th><td>정제수, 카프릴릭/카프릭트라이글리세라이드, 나이아신아마이드, 카프릴릴메티콘, 다이프로필렌그라이콜, 부틸렌그라이콜, 시트릭애씨드, 트라넥사믹애씨드, 세테아릴알코올, 3-O-에틸아스코빅애씨드, 글리세린, 1,2-헥산다이올, 베타인, 세틸알코올, 글리세릴스테아레이트, 판테놀, 시어버터, 세테아릴올리베이트, 베헤닐알코올, 폴리아크릴레이트크로스폴리머-6, 솔비탄올리베이트, 세테아릴글루코사이드, 페룰릭애씨드, 스테아릴알코올, 알란토인, 팔미틱애씨드, 스테아릭애씨드, 알라닌, 푸코실락토오스, 폴리글리세릴-10라우레이트, 흰목이버섯폴리사카라이드, 미리스틸알코올, 아시아티코사이드, 마데카식애씨드, 에틸헥실글리세린, 다이소듐이디티에이, 글리세레스-26, 소듐하이알루로네이트, 토코페릴아세테이트, 아데노신, 아시아틱애씨드, 라우릴알코올, t-부틸알코올, 펜타에리스리틸테트라-다이-t-부틸하이드록시하이드로신나메이트, 아미노부티릭애씨드, 미리스틱애씨드, 글라이신, 아라키딕애씨드, 소듐팔미토일사코시네이트, 글루타믹애씨드, 알지닌, 올레익애씨드, 아스파틱애씨드, 라이신, 세린, 트레오닌, 시스테인, 히스티딘, 타이로신, 토코페롤</td></tr>
+<tr><th>화장품제조업자</th><td>(주)위노바 / 경기도 평택시 청북읍 청북산단로 178</td></tr>
+<tr><th>화장품책임판매업자</th><td>(주)와이엘트레이딩 / 경기도 안양시 동안구 시민대로 401, 2001호(관양동, 대륭테크노타운 15차)</td></tr>
+<tr><th>소비자상담실</th><td>02-6342-9496</td></tr>
+<tr><th>주의사항</th><td>화장품 사용 시 또는 사용 직후 직사광선에 의하여 사용부위가 붉은 반점, 부어오름 또는 가려움증 등의 이상 증상이나 부작용이 있는 경우에는 전문의 등과 상담해주세요.<br>상처가 있는 부위 등에는 사용을 자제해주세요.<br>어린이의 손이 닿지 않는 곳에 보관해주세요.<br>직사광선을 피해서 보관해주세요.</td></tr>
+<tr><th>제품의 pH</th><td>4.1 (기능성화장품 보고서 기재값)</td></tr></table>
+          </details>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb"><img src="img/nmn30000.jpg" alt="파머시안 NMN 30,000 크림 제품 이미지" loading="lazy" width="1000" height="1792"></div>
+        <div class="body">
+          <p class="eyeb">NMN 30,000ppm 리포좀</p>
+          <h3>파머시안 NMN 30,000 크림<span class="vol">30g</span></h3>
+          <p class="ing">모노-뉴클레오타이드 30,000ppm</p>
+          <div class="price"><b class="num">38,000</b><span>원</span><span class="pending">가격 확정 전</span></div>
+          <p class="ship">배송비 3,000원 · 오픈 시 결제 가능</p>
+          <details>
+            <summary>상품정보 제공고시 · 전성분</summary>
+            <table><tr><th>제품명</th><td>브이씨엑소 파머시안 엔엠엔 30000 크림<br>(VCXO PHARMACIAN NMN 30,000 CREAM)</td></tr>
+<tr><th>용량</th><td>30g(1.05oz.)</td></tr>
+<tr><th>피부타입</th><td>모든 피부</td></tr>
+<tr><th>사용기한</th><td>별도표기</td></tr>
+<tr><th>용법용량</th><td>본품 적당량을 취해 피부에 골고루 펴 바른다.</td></tr>
+<tr><th>효능효과</th><td>피부의 미백에 도움을 준다. 피부의 주름개선에 도움을 준다.</td></tr>
+<tr><th>전성분</th><td>정제수, 카프릴릭/카프릭트라이글리세라이드, 세틸알코올, 나이아신아마이드, 모노-뉴클레오타이드(30,000ppm), 세틸에틸헥사노에이트, 카프릴릴메티콘, 1,2-헥산다이올, 나이아신아마이드, 베타인, 글리세릴스테아레이트, 하이드로제네이티드폴리데센, 세테아릴올리베이트, 스테아릴알코올, 솔비탄올리베이트, 세테아릴글루코사이드, 알란토인, 아크릴레이트/C10-30알킬아크릴레이트크로스폴리머, 트로메타민, 글리세린, 폴리아크릴레이트크로스폴리머-6, 레시틴, 미리 스틸알코올, 에틸헥실글리세린, 흰목이버섯폴리사카라이드, 다이소듐이디티에이, 아데노신, 라우릴알코올, 세라마이드엔피, 피토스테롤, 레몬껍질오일, 올레익애씨드, 하이드로제네이티드레시틴, 베르가모트오일, 소듐하이알루로네이트, 단백질추출물, 리씨열매오일, 부틸렌글라이콜, 연필향나무오일, 소두구씨오일, 발삼아미리스껍질오일, 칸디다 봄비콜라/글루코오스/메틸레이프씨데이트발효물, 세테아릴알코올, 클레리오일, 스테아릭애씨드, 폴리글리세릴-3메틸글루코오스다이스테아레이트, t-부틸알코올, 살베아오일, 코코넛야자오일, 프로판다이올, 튀김꽃/잎/오일, 사과 추출물, 폴리글리세릴-10라우레이트, 카퍼트라이펩타이드-1, 올리브추출물</td></tr>
+<tr><th>화장품제조업자</th><td>(주)위노바 / 경기도 평택시 청북읍 청북산단로 178</td></tr>
+<tr><th>화장품책임판매업자</th><td>(주)와이엘트레이딩 / 경기도 안양시 동안구 시민대로 401, 2001호(관양동, 대륭테크노타운 15차)</td></tr>
+<tr><th>소비자상담실</th><td>02-6342-9496</td></tr>
+<tr><th>주의사항</th><td>화장품 사용 시 또는 사용 직후 직사광선에 의하여 사용부위가 붉은 반점, 부어오름 또는 가려움증 등의 이상 증상이나 부작용이 있는 경우에는 전문의 등과 상담해주세요.<br>상처가 있는 부위 등에는 사용을 자제해주세요.<br>어린이의 손이 닿지 않는 곳에 보관해주세요.<br>직사광선을 피해서 보관해주세요.</td></tr></table>
+          </details>
+        </div>
+      </article>
+    </div>
+    <p class="disc">화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 표시된 가격은 오픈 예정가이며 결제는 준비 중입니다.</p>
   </div>
+</section><!--/GOODS-->
 </main>
 
 <footer>
