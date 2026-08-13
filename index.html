@@ -1,0 +1,78 @@
+<!-- ODEAL 공개용 준비 페이지. 루비 지시(2026-08-13): 상품 이미지·이벤트 가격은 전부 뺀다. 판매 표시로 읽히면 안 되기 때문이다. -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ODEAL 오늘의 딜</title>
+<meta name="description" content="화장품부터 먹거리까지, 오늘 열리는 거래. 주식회사 와이엘트레이딩이 준비 중입니다.">
+<meta property="og:title" content="ODEAL 오늘의 딜">
+<meta property="og:description" content="화장품부터 먹거리까지, 오늘 열리는 거래.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--page:#F3F3F1;--ink:#17181A;--ink-2:#5A5D63;--ink-3:#8E9299;--line:#E3E3DF;--accent:#E8380D}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100dvh;display:flex;flex-direction:column;background:var(--page);color:var(--ink);
+  font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.6;word-break:keep-all;overflow-wrap:break-word}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:64px 24px}
+.in{width:100%;max-width:560px}
+
+.mark{display:block}
+.mark .ring{stroke-dasharray:167;stroke-dashoffset:167;animation:draw 1.5s cubic-bezier(.16,1,.3,1) .2s forwards}
+.mark .word{opacity:0;animation:fade .8s ease .9s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+
+h1{margin-top:38px;font-size:clamp(27px,4.4vw,40px);font-weight:800;letter-spacing:-.045em;line-height:1.28}
+h1 em{font-style:normal;color:var(--accent)}
+p.lead{margin-top:18px;font-size:16.5px;color:var(--ink-2);max-width:42ch}
+.state{margin-top:34px;display:inline-flex;align-items:center;gap:10px;height:38px;padding:0 18px;
+  border:1px solid var(--line);border-radius:999px;background:#fff;font-size:14.5px;font-weight:700;color:var(--ink-2)}
+.state i{width:7px;height:7px;border-radius:50%;background:var(--accent);display:block}
+.contact{margin-top:30px;font-size:15px;color:var(--ink-2)}
+.contact a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+
+footer{border-top:1px solid var(--line);padding:26px 24px 40px}
+.fin{max-width:560px;margin:0 auto;font-size:12.5px;color:var(--ink-3);line-height:1.9}
+.fin b{color:var(--ink-2);font-weight:700}
+
+@media (prefers-reduced-motion:reduce){
+  .mark .ring{animation:none;stroke-dashoffset:0}
+  .mark .word{animation:none;opacity:1}
+}
+@media (max-width:560px){ main{padding:48px 20px} }
+</style>
+</head>
+<body>
+
+<main>
+  <div class="in">
+    <svg class="mark" viewBox="0 8 310 80" width="215" role="img" aria-label="ODEAL">
+      <circle class="ring" cx="35" cy="48" r="26.5" fill="none" stroke="#E8380D" stroke-width="17"
+              transform="rotate(-90 35 48)"/>
+      <text class="word" x="70" y="82" font-family="Pretendard Variable, Pretendard, sans-serif"
+            font-size="96" font-weight="800" letter-spacing="-4" fill="#17181A">DEAL</text>
+    </svg>
+
+    <h1>화장품부터 먹거리까지,<br><em>오늘</em> 열리는 거래.</h1>
+    <p class="lead">좋은 물건을 좋은 값에 여는 자리를 만들고 있습니다. 준비가 끝나는 대로 문을 엽니다.</p>
+
+    <div class="state"><i></i>오픈 준비 중</div>
+
+    <p class="contact">입점·제휴 문의는 <a href="mailto:hello@odeal.co.kr">hello@odeal.co.kr</a></p>
+  </div>
+</main>
+
+<footer>
+  <div class="fin">
+    <b>주식회사 와이엘트레이딩</b> · 대표 이권선 · 사업자등록번호 741-86-03645<br>
+    경기도 안양시 동안구 시민대로 401, 2001호 · 통신판매업신고 2025-안양동안-0740<br>
+    이 페이지는 오픈 준비 안내이며 상품 판매나 청약의 표시가 아닙니다.
+  </div>
+</footer>
+
+</body>
+</html>
