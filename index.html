@@ -247,8 +247,12 @@ main{display:block}
   $('#kakao').disabled = false;
   $('#google').disabled = false;
 
+  // 받을 것만 요구한다. Supabase 기본값은 프로필 사진까지 달라고 해서 카카오가 KOE205로 막는다.
+  const SCOPES = { kakao: 'profile_nickname account_email', google: 'openid email profile' };
   const login = async provider => {
-    const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo: location.origin + '/' } });
+    const { error } = await sb.auth.signInWithOAuth({
+      provider, options: { redirectTo: location.origin + '/', scopes: SCOPES[provider] }
+    });
     if (error) $('#authnote').textContent = '로그인에 실패했습니다: ' + error.message;
   };
   $('#kakao').addEventListener('click', () => login('kakao'));
