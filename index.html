@@ -97,6 +97,7 @@ main{display:block}
 .signed{margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;
   padding:15px 18px;background:#fff;border:1px solid var(--line);border-radius:12px;max-width:420px}
 .signed b{font-weight:800;letter-spacing:-.02em}
+.ava{border-radius:50%;object-fit:cover;background:var(--page);flex:0 0 auto}
 .signed .go{margin-left:auto;font-size:14.5px;font-weight:700;color:var(--accent);
   text-decoration:underline;text-underline-offset:4px}
 .signed .out{font-size:13px;color:var(--ink-3);background:none;border:0;cursor:pointer;text-decoration:underline}
@@ -130,6 +131,7 @@ main{display:block}
     <p class="authnote" id="authnote">가입하면 오픈 알림을 먼저 받습니다. 카카오는 닉네임만, 구글은 계정 정보만 받습니다.</p>
 
     <div class="signed hide" id="signed">
+      <img class="ava hide" id="ava" alt="" width="34" height="34">
       <span><b id="whoami">회원</b>님으로 로그인되어 있습니다</span>
       <a class="go" href="join.html">배송지 등록</a>
       <button class="out" id="signout" type="button">로그아웃</button>
@@ -247,12 +249,10 @@ main{display:block}
   $('#kakao').disabled = false;
   $('#google').disabled = false;
 
-  // 받을 것만 요구한다. Supabase 기본값은 프로필 사진까지 달라고 해서 카카오가 KOE205로 막는다.
-  const SCOPES = { kakao: 'profile_nickname account_email', google: 'openid email profile' };
+  // scopes는 넘기지 않는다. Supabase는 기본값을 교체하지 않고 덧붙이기 때문에 중복만 생긴다.
+  // 카카오 기본값 = account_email · profile_image · profile_nickname 셋이고, 콘솔에 셋 다 켜둬야 KOE205가 안 난다.
   const login = async provider => {
-    const { error } = await sb.auth.signInWithOAuth({
-      provider, options: { redirectTo: location.origin + '/', scopes: SCOPES[provider] }
-    });
+    const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo: location.origin + '/' } });
     if (error) $('#authnote').textContent = '로그인에 실패했습니다: ' + error.message;
   };
   $('#kakao').addEventListener('click', () => login('kakao'));
@@ -267,6 +267,10 @@ main{display:block}
     if (!on) return;
     const m = user.user_metadata || {};
     $('#whoami').textContent = m.name || m.full_name || m.nickname || m.preferred_username || '회원';
+    const pic = m.avatar_url || m.picture || m.profile_image_url || '';
+    const av = $('#ava');
+    av.classList.toggle('hide', !pic);
+    if (pic) { av.src = pic; av.referrerPolicy = 'no-referrer'; }
   }
   sb.auth.getSession().then(({ data }) => paint(data.session && data.session.user));
   sb.auth.onAuthStateChange((_e, s) => paint(s && s.user));

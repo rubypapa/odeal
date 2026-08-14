@@ -205,18 +205,18 @@ function setWho(label){
   go(2);
 }
 
-// 받을 것만 요구한다. Supabase 기본값은 프로필 사진까지 달라고 해서 카카오가 KOE205로 막는다.
-const SCOPES = { kakao: 'profile_nickname account_email', google: 'openid email profile' };
+// scopes는 넘기지 않는다. Supabase는 기본값을 교체하지 않고 덧붙이기 때문에 중복만 생긴다.
+// 카카오 기본값 = account_email · profile_image · profile_nickname 셋이고, 콘솔에 셋 다 켜둬야 KOE205가 안 난다.
 $('#kakao').addEventListener('click', async () => {
   const { error } = await sb.auth.signInWithOAuth({
-    provider: 'kakao', options: { redirectTo: location.href, scopes: SCOPES.kakao }
+    provider: 'kakao', options: { redirectTo: location.href }
   });
   if (error) alert('카카오 로그인 실패: ' + error.message);
 });
 $('#google').addEventListener('click', async () => {
   if (sb) {
     const { error } = await sb.auth.signInWithOAuth({
-      provider: 'google', options: { redirectTo: location.href, scopes: SCOPES.google }
+      provider: 'google', options: { redirectTo: location.href }
     });
     if (error) alert('구글 로그인 실패: ' + error.message);
   }
