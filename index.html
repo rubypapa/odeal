@@ -72,6 +72,9 @@ main{display:block}
 .pending{margin-left:8px;font-size:12px;font-weight:700;color:var(--accent);
   background:#FDECE7;border-radius:999px;padding:3px 9px;align-self:center}
 .ship{margin-top:6px;font-size:13px;color:var(--ink-3)}
+/* 폐쇄몰 — 비로그인에게 보이는 자물쇠 표기. 실제 값은 서버에만 있다 */
+.locked{font-size:15px;font-weight:800;letter-spacing:-.02em;color:var(--ink-2);
+  background:var(--page);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
 .card details{margin-top:16px;border-top:1px solid var(--line);padding-top:13px}
 .card summary{font-size:13.5px;font-weight:700;color:var(--ink-2);cursor:pointer;list-style:none}
 .card summary::-webkit-details-marker{display:none}
@@ -151,8 +154,8 @@ main{display:block}
           <p class="eyeb">연어 PDRN 7,000ppm</p>
           <h3>파머시안 PDRN 7000 크림<span class="vol">30g</span></h3>
           <p class="ing">소듐디엔에이 7,000ppm · 락토바실러스세포외소포 5,580ppm</p>
-          <div class="price"><b class="num">53,000</b><span>원</span><span class="pending">가격 확정 전</span></div>
-          <p class="ship">상품 50,000원 + 배송비 3,000원 · 오픈 시 결제 가능</p>
+          <div class="price" data-price-key="p7"><span class="locked">회원 전용가</span></div>
+          <p class="ship" data-ship-key="p7">로그인하면 가격이 보입니다</p>
           <details>
             <summary>상품정보 제공고시 · 전성분</summary>
             <table><tr><th>제품명</th><td>파머시안 피디알엔 7000 크림<br>(PHARMACIAN PDRN 7000 CREAM)</td></tr>
@@ -175,8 +178,8 @@ main{display:block}
           <p class="eyeb">미백 기능성 크림</p>
           <h3>파머시안 멜라리스 100,000 크림<span class="vol">30g</span></h3>
           <p class="ing">나이아신아마이드 · 트라넥사믹애씨드 · 3-O-에틸아스코빅애씨드</p>
-          <div class="price"><b class="num">53,000</b><span>원</span><span class="pending">가격 확정 전</span></div>
-          <p class="ship">상품 50,000원 + 배송비 3,000원 · 오픈 시 결제 가능</p>
+          <div class="price" data-price-key="mel"><span class="locked">회원 전용가</span></div>
+          <p class="ship" data-ship-key="mel">로그인하면 가격이 보입니다</p>
           <details>
             <summary>상품정보 제공고시 · 전성분</summary>
             <table><tr><th>제품명</th><td>브이씨엑소 파머시안 멜라리스 10만 크림<br>(VCXO PHARMACIAN MELALESS 100,000 CREAM)</td></tr>
@@ -200,8 +203,8 @@ main{display:block}
           <p class="eyeb">NMN 30,000ppm 리포좀</p>
           <h3>파머시안 NMN 30,000 크림<span class="vol">30g</span></h3>
           <p class="ing">모노-뉴클레오타이드 30,000ppm</p>
-          <div class="price"><b class="num">53,000</b><span>원</span><span class="pending">가격 확정 전</span></div>
-          <p class="ship">상품 50,000원 + 배송비 3,000원 · 오픈 시 결제 가능</p>
+          <div class="price" data-price-key="nmn"><span class="locked">회원 전용가</span></div>
+          <p class="ship" data-ship-key="nmn">로그인하면 가격이 보입니다</p>
           <details>
             <summary>상품정보 제공고시 · 전성분</summary>
             <table><tr><th>제품명</th><td>브이씨엑소 파머시안 엔엠엔 30000 크림<br>(VCXO PHARMACIAN NMN 30,000 CREAM)</td></tr>
@@ -219,7 +222,7 @@ main{display:block}
         </div>
       </article>
     </div>
-    <p class="disc">표시 금액은 배송비를 포함한 총 결제 예정 금액입니다. 화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 결제는 준비 중이며 가격은 확정 전입니다.</p>
+    <p class="disc">가격은 회원에게만 공개합니다. 표시 금액은 배송비를 포함한 총 결제 예정 금액입니다. 화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 결제는 준비 중이며 가격은 확정 전입니다.</p>
   </div>
 </section><!--/GOODS-->
 </main>
@@ -272,6 +275,32 @@ main{display:block}
     av.classList.toggle('hide', !pic);
     if (pic) { av.src = pic; av.referrerPolicy = 'no-referrer'; }
   }
+
+  // ★폐쇄몰 게이트. 가격은 HTML에 없고 DB에만 있다(product_price).
+  //   비로그인·크롤러는 anon 권한이라 42501로 막히고, 로그인해야 값이 온다.
+  //   그래서 소스보기로도 가격이 안 나온다 — CSS로 숨기는 것과는 다르다.
+  const won = n => n.toLocaleString('ko-KR');
+  async function paintPrice(on) {
+    const slots = document.querySelectorAll('[data-price-key]');
+    if (!on) {
+      slots.forEach(el => { el.innerHTML = '<span class="locked">회원 전용가</span>'; });
+      document.querySelectorAll('[data-ship-key]').forEach(el => { el.textContent = '로그인하면 가격이 보입니다'; });
+      return;
+    }
+    const { data, error } = await sb.from('product_price').select('key,price,ship,note');
+    if (error || !data) return;                       // 못 읽으면 잠긴 상태 그대로 둔다
+    const m = Object.fromEntries(data.map(r => [r.key, r]));
+    slots.forEach(el => {
+      const r = m[el.dataset.priceKey];
+      if (!r) return;
+      const tag = r.note && r.note !== '확정' ? '<span class="pending">가격 확정 전</span>' : '';
+      el.innerHTML = `<b class="num">${won(r.price + r.ship)}</b><span>원</span>${tag}`;
+    });
+    document.querySelectorAll('[data-ship-key]').forEach(el => {
+      const r = m[el.dataset.shipKey];
+      if (r) el.textContent = `상품 ${won(r.price)}원 + 배송비 ${won(r.ship)}원 · 오픈 시 결제 가능`;
+    });
+  }
   // 우리는 카카오·구글의 액세스 토큰을 쓰지 않는다. 브라우저에 남겨둘 이유가 없으므로 지운다.
   // 남겨두면 화면에 스크립트가 끼어들었을 때 그 토큰까지 같이 새어 나간다.
   function dropProviderToken() {
@@ -286,8 +315,11 @@ main{display:block}
     } catch (_) { /* 저장 형식이 바뀌면 조용히 넘어간다. 지우기 실패가 로그인을 막으면 안 된다 */ }
   }
 
-  sb.auth.getSession().then(({ data }) => { paint(data.session && data.session.user); dropProviderToken(); });
-  sb.auth.onAuthStateChange((_e, s) => { paint(s && s.user); dropProviderToken(); });
+  sb.auth.getSession().then(({ data }) => {
+    const u = data.session && data.session.user;
+    paint(u); paintPrice(!!u); dropProviderToken();
+  });
+  sb.auth.onAuthStateChange((_e, s) => { paint(s && s.user); paintPrice(!!(s && s.user)); dropProviderToken(); });
 })();
 </script>
 
