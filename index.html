@@ -272,8 +272,22 @@ main{display:block}
     av.classList.toggle('hide', !pic);
     if (pic) { av.src = pic; av.referrerPolicy = 'no-referrer'; }
   }
-  sb.auth.getSession().then(({ data }) => paint(data.session && data.session.user));
-  sb.auth.onAuthStateChange((_e, s) => paint(s && s.user));
+  // 우리는 카카오·구글의 액세스 토큰을 쓰지 않는다. 브라우저에 남겨둘 이유가 없으므로 지운다.
+  // 남겨두면 화면에 스크립트가 끼어들었을 때 그 토큰까지 같이 새어 나간다.
+  function dropProviderToken() {
+    const k = 'sb-' + new URL(C.SUPABASE_URL).hostname.split('.')[0] + '-auth-token';
+    try {
+      const raw = localStorage.getItem(k);
+      if (!raw) return;
+      const v = JSON.parse(raw);
+      if (v.provider_token == null && v.provider_refresh_token == null) return;
+      delete v.provider_token; delete v.provider_refresh_token;
+      localStorage.setItem(k, JSON.stringify(v));
+    } catch (_) { /* 저장 형식이 바뀌면 조용히 넘어간다. 지우기 실패가 로그인을 막으면 안 된다 */ }
+  }
+
+  sb.auth.getSession().then(({ data }) => { paint(data.session && data.session.user); dropProviderToken(); });
+  sb.auth.onAuthStateChange((_e, s) => { paint(s && s.user); dropProviderToken(); });
 })();
 </script>
 

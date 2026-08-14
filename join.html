@@ -168,7 +168,7 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
 <script>
 const $ = s => document.querySelector(s);
 const C = window.ODEAL || {};
-let sb = null, me = null;
+let sb = null, me = null, myId = null;
 
 /* ── 무엇이 설정 안 됐는지 화면에 그대로 띄운다 ─────────────── */
 const missing = [];
@@ -230,9 +230,26 @@ $('#back').addEventListener('click', () => go(1));
   const { data } = await sb.auth.getUser();
   if (data && data.user) {
     const u = data.user;
+    myId = u.id;                                   // 배송지를 이 계정에 묶는다
     setWho(u.email || (u.user_metadata && u.user_metadata.name) || '로그인됨');
   }
+  dropProviderToken();
 })();
+
+/* 우리는 카카오·구글의 액세스 토큰을 쓰지 않는다. 브라우저에 남겨둘 이유가 없으므로 지운다.
+   남겨두면 화면에 스크립트가 끼어들었을 때 그 토큰까지 같이 새어 나간다. */
+function dropProviderToken(){
+  const k = 'sb-' + new URL(C.SUPABASE_URL).hostname.split('.')[0] + '-auth-token';
+  try {
+    const raw = localStorage.getItem(k);
+    if (!raw) return;
+    const v = JSON.parse(raw);
+    if (v.provider_token == null && v.provider_refresh_token == null) return;
+    delete v.provider_token; delete v.provider_refresh_token;
+    localStorage.setItem(k, JSON.stringify(v));
+  } catch (_) { /* 저장 형식이 바뀌면 조용히 넘어간다. 지우기 실패가 로그인을 막으면 안 된다 */ }
+}
+if (sb) sb.auth.onAuthStateChange(() => dropProviderToken());
 
 /* ── 입력 편의 ─────────────────────────────────────────── */
 $('#tel').addEventListener('input', e => {
@@ -270,6 +287,8 @@ $('#form').addEventListener('submit', async e => {
   if (bad || !valid()) return;
 
   const rec = {
+    // 로그인했으면 그 계정에 묶는다. 안 묶으면 본인도 자기 배송지를 다시 못 본다(RLS가 user_id로 판단한다).
+    user_id: myId,
     name: $('#name').value.trim(),
     tel: $('#tel').value,
     zip: $('#zip').value,
