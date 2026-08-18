@@ -238,6 +238,7 @@ main{display:block}
 </footer>
 
 <script src="config.js"></script>
+<script src="track.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onerror="window.__nosb=1"></script>
 <script>
 // 메인에서도 바로 로그인한다. 토큰 교환은 Supabase가 하고 이 페이지는 시크릿을 갖지 않는다.
@@ -274,6 +275,19 @@ main{display:block}
     const av = $('#ava');
     av.classList.toggle('hide', !pic);
     if (pic) { av.src = pic; av.referrerPolicy = 'no-referrer'; }
+    track(user);
+  }
+
+  // 광고 전환 보고. ★가입과 재로그인을 갈라야 한다 — 로그인할 때마다 가입으로 세면 전환이 뻥튀기된다.
+  //   계정 생성 시각과 이번 로그인 시각이 1분 안이면 방금 가입한 것으로 본다.
+  let tracked = false;
+  function track(u) {
+    if (tracked || !window.ODEAL_TRACK || !window.ODEAL_TRACK.on) return;
+    tracked = true;
+    window.ODEAL_TRACK.identify({ email: u.email });
+    const made = Date.parse(u.created_at || 0);
+    const seen = Date.parse(u.last_sign_in_at || 0);
+    if (made && seen && Math.abs(seen - made) < 60000) window.ODEAL_TRACK.signup();
   }
 
   // ★폐쇄몰 게이트. 가격은 HTML에 없고 DB에만 있다(product_price).

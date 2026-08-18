@@ -70,6 +70,7 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
 </div>
 
 <script src="config.js"></script>
+<script src="track.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onerror="window.__nosb=1"></script>
 <script src="https://js.tosspayments.com/v2/standard" onerror="window.__notoss=1"></script>
 <script>
@@ -127,6 +128,8 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
     $('#gate').classList.toggle('hide', !!u);
     $('#shop').classList.toggle('hide', !u);
     if (!u) return;
+    // 로그인한 사람의 이메일을 넘기면 광고 전환 매칭률이 오른다(해싱은 메타·구글이 한다)
+    if (window.ODEAL_TRACK) window.ODEAL_TRACK.identify({ email: u.email });
 
     const { data, error } = await sb.from('product_price').select('key,price,ship');
     if (error || !data || !data.length) { $('#items').textContent = '가격을 불러오지 못했습니다.'; return; }
@@ -157,6 +160,7 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
       });
       const order = await res.json();
       if (!res.ok) throw new Error(order.error || '주문 생성 실패');
+      if (window.ODEAL_TRACK) window.ODEAL_TRACK.beginCheckout({ value: order.amount, orderId: order.orderId });
 
       const first = NAMES[items[0].key] || 'ODEAL 주문';
       const orderName = items.length > 1 ? `${first} 외 ${items.length - 1}건` : first;
