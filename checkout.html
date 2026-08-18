@@ -101,8 +101,14 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
       </div>`).join('');
     $('#items').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
       const k = b.dataset.k, d = +b.dataset.d;
-      qty[k] = Math.max(0, Math.min(20, (qty[k] || 0) + d));
+      const before = qty[k] || 0;
+      qty[k] = Math.max(0, Math.min(20, before + d));
       $('#q-' + k).value = qty[k];
+      // ★5단계 전환: 0에서 1로 올라간 순간이 '담았다'이다
+      if (before === 0 && qty[k] === 1 && window.ODEAL_TRACK) {
+        const r = rows.find(x => x.key === k);
+        window.ODEAL_TRACK.addToCart({ key: k, name: NAMES[k] || k, value: r ? r.price : 0 });
+      }
       drawSum();
     }));
   }

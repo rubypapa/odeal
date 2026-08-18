@@ -329,6 +329,27 @@ main{display:block}
     } catch (_) { /* 저장 형식이 바뀌면 조용히 넘어간다. 지우기 실패가 로그인을 막으면 안 된다 */ }
   }
 
+  // ★2단계 전환: 상품을 실제로 들여다본 사람.
+  //   상품 섹션이 화면에 들어오면 한 번, 전성분을 펼치면 그 상품으로 한 번 더 잡는다.
+  //   '그냥 들어와 본 사람'과 '관심을 보인 사람'을 갈라야 광고를 다르게 태울 수 있다.
+  (function () {
+    const goods = document.querySelector('#goods');
+    if (!goods || !window.ODEAL_TRACK) return;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => {
+        if (es.some(e => e.isIntersecting)) { window.ODEAL_TRACK.viewContent({}); io.disconnect(); }
+      }, { threshold: 0.3 });
+      io.observe(goods);
+    }
+    goods.querySelectorAll('details').forEach(d => d.addEventListener('toggle', () => {
+      if (!d.open) return;
+      const card = d.closest('.card');
+      const h3 = card && card.querySelector('h3');
+      const key = card ? [...goods.querySelectorAll('.card')].indexOf(card) : 0;
+      window.ODEAL_TRACK.viewContent({ key: 'p' + key, name: h3 ? h3.childNodes[0].textContent.trim() : '' });
+    }));
+  })();
+
   sb.auth.getSession().then(({ data }) => {
     const u = data.session && data.session.user;
     paint(u); paintPrice(!!u); dropProviderToken();

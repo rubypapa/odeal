@@ -67,16 +67,55 @@
     }
   };
 
+  // ── 퍼널 단계별 이벤트 ────────────────────────────────
+  // ★단계를 잘게 쪼개는 이유: 메타·구글에서 "이 단계까지 왔지만 다음으로 안 넘어간 사람"으로
+  //   맞춤 타겟을 만들어 각각 다른 광고를 태우기 위해서다. 이벤트가 뭉뚱그려져 있으면 그게 안 된다.
+  //   같은 이벤트를 두 번 세지 않도록 한 번 보낸 것은 기억해 둔다.
+  var once = {};
+  function only(k) { if (once[k]) return false; once[k] = 1; return true; }
+
+  // 1단계 · 그냥 들어와 본 사람
   T.view = function () { fb('PageView'); };
 
+  // 2단계 · 상품을 실제로 들여다본 사람 (관심 표현)
+  T.viewContent = function (o) {
+    if (!only('vc' + ((o && o.key) || ''))) return;
+    fb('ViewContent', { content_name: (o && o.name) || undefined, content_type: 'product' });
+    gt('view_item', { items: o && o.key ? [{ item_id: o.key, item_name: o.name }] : undefined });
+  };
+
+  // 3단계 · 회원가입한 사람
   T.signup = function () {
+    if (!only('signup')) return;
     fb('CompleteRegistration');
     gt('sign_up', { method: 'social' });
   };
 
+  // 4단계 · ★배송지까지 입력한 사람 (구매 의사가 가장 뚜렷한 층)
+  //   메타 표준 이벤트에 '배송지 입력'이 없어 Lead로 잡고, 구글은 표준 이벤트가 있다.
+  T.shipping = function () {
+    if (!only('ship')) return;
+    fb('Lead', { content_name: 'shipping_address' });
+    gt('add_shipping_info');
+  };
+
+  // 5단계 · 장바구니에 담은 사람
+  T.addToCart = function (o) {
+    if (!only('atc' + o.key)) return;
+    fb('AddToCart', { content_name: o.name, value: o.value, currency: 'KRW' });
+    gt('add_to_cart', { value: o.value, currency: 'KRW', items: [{ item_id: o.key, item_name: o.name }] });
+  };
+
+  // 6단계 · 결제를 시작한 사람
   T.beginCheckout = function (o) {
     fb('InitiateCheckout', { value: o.value, currency: 'KRW' }, o.orderId);
     gt('begin_checkout', { value: o.value, currency: 'KRW', transaction_id: o.orderId });
+  };
+
+  // 7단계 · 나눔·이벤트에 응모한 사람 (결제 퍼널과 별개 축)
+  T.applyEvent = function (name) {
+    fb('SubmitApplication', { content_name: name || 'giveaway' });
+    gt('generate_lead', { event_label: name || 'giveaway' });
   };
 
   // ★결제 완료. 서버(pay-confirm)도 같은 event_id로 메타에 보낸다.

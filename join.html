@@ -313,6 +313,8 @@ $('#form').addEventListener('submit', async e => {
   $('#r-addr').textContent = `(${rec.zip}) ${rec.addr1} ${rec.addr2}`.trim();
   $('#r-ad').textContent   = rec.marketing ? '문자·알림톡 받음' : '받지 않음';
   $('#r-save').textContent = saved;
+  // ★4단계 전환: 배송지까지 입력한 사람 = 구매 의사가 가장 뚜렷한 층
+  if (window.ODEAL_TRACK) window.ODEAL_TRACK.shipping();
   $('#donemsg').textContent = sb ? '배송지가 저장됐습니다.' : '화면 흐름 확인용입니다. 저장소를 연결하면 실제로 기록됩니다.';
   go(3);
 });
