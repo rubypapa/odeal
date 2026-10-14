@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ODEAL 오늘의 딜</title>
-<meta name="description" content="오늘 가입하면 릴리바이레드 무드키보드가 무료. 화장품부터 먹거리까지, 오늘 열리는 거래.">
+<meta name="description" content="오늘 가입시 올영 인기템 릴바 무드키보드 무료딜 참여 가능. 화장품부터 먹거리까지, 오늘 열리는 거래.">
 <meta property="og:title" content="ODEAL 오늘의 딜">
 <meta property="og:description" content="화장품부터 먹거리까지, 오늘 열리는 거래.">
 <meta property="og:type" content="website">
@@ -220,7 +220,11 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .hide{display:none}
 .give{border-top:1px solid var(--line)}
 .btn-guest{margin-top:4px}
-.hero-card img{aspect-ratio:1/1}   /* 무드키보드 사진은 정사각형 · 잘리지 않게 */
+.hero-card img{aspect-ratio:832/489;object-fit:contain;background:#fff}   /* 흰 띠를 잘라낸 누끼(832×489)를 그대로 · 카드 전체가 정사각에 가깝다 */
+.timer{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:14px;padding:10px 14px;border-radius:12px;background:#1b1b1b;color:#fff;font-size:14px;font-weight:700}
+.timer #tleft{font-size:22px;letter-spacing:.02em;color:#FFD84D}
+.timer .tsep{opacity:.5}
+.timer .tlabel b{color:#FFD84D}
 </style>
 </head>
 <body>
@@ -234,7 +238,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
       </svg>
     </div>
     <nav class="nav-links">
-      <a href="#give">무료 나눔</a>
+      <a href="#give">무료딜</a>
       <a href="#goods">오늘의 딜</a>
       <a href="#vault">회원 전용관</a>
     </nav>
@@ -252,8 +256,9 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
   <section class="hero">
     <div class="shell hero-grid">
       <div>
-        <span class="eyebrow hide" id="eyebrow">오늘 나눔 남은 수량 <b class="num" id="left">-</b>개</span>
-        <h1>오늘 가입하면<br><em>무드키보드</em>가 무료입니다.</h1>
+        <div class="timer" id="timer"><span class="tlabel">이번 무료딜 마감까지</span><b class="num" id="tleft">--:--:--</b><span class="tsep">·</span><span class="tlabel">한정수량 <b class="num">1,000개</b></span></div>
+        <span class="eyebrow hide" id="eyebrow">오늘 무료딜 남은 수량 <b class="num" id="left">-</b>개</span>
+        <h1>오늘 가입시 올영 인기템<br><em>릴바 무드키보드</em><br>무료딜 참여 가능</h1>
         <p class="lead">릴리바이레드 무드키보드 4종 가운데 한 가지가 랜덤으로 갑니다. 상품값은 0원, 배송비 3,000원만 내면 됩니다. 어떤 색이 올지는 열어 봐야 압니다.</p>
         <div class="gate">
           <div class="auth" id="auth">
@@ -264,7 +269,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
           <div class="signed hide" id="signed">
             <img class="ava hide" id="ava" alt="" width="34" height="34">
             <span><b id="whoami">회원</b>님으로 로그인되어 있습니다</span>
-            <a class="go" href="#give">무료 나눔 신청</a>
+            <a class="go" href="#give">무료딜 신청</a>
             <button class="out" id="signout" type="button">로그아웃</button>
           </div>
           <a class="btn btn-guest" href="#goods">계정 없이 비회원으로 둘러보기</a>
@@ -273,7 +278,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 
       <figure class="hero-card">
         <span class="tag-free">상품값 0원</span>
-        <img src="img/keyboard_4set.webp" alt="릴리바이레드 무드키보드 4종 제품 사진" width="1000" height="1000">
+        <img src="img/keyboard_4set.webp" alt="릴리바이레드 무드키보드 4종 제품 사진" width="832" height="489">
         <figcaption class="hero-card-body">
           <h3>릴리바이레드 무드키보드 · 4종 중 랜덤 1개</h3>
           <div class="priceline">
@@ -300,8 +305,8 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 <!--GIVE-->
 <section class="give hide" id="give">
   <div class="in">
-    <h2>지금 나누고 있는 것</h2>
-    <p class="gsub">한 회차에 한 품목씩 무료로 나눕니다. 다음 회차는 미리 예약해 두면 열릴 때 먼저 신청됩니다.</p>
+    <h2>지금 열린 무료딜</h2>
+    <p class="gsub">한 회차에 한 품목씩 무료딜로 엽니다. 다음 회차는 미리 예약해 두면 열릴 때 먼저 신청됩니다.</p>
     <div class="gcards" id="gcards"></div>
     <p class="gfoot">밖에서 사는 값과 비교해 보고 담아보세요. 유통 단계를 하나 건너뛴 값입니다.</p>
   </div>
@@ -404,7 +409,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
     <b>주식회사 와이엘트레이딩</b> · 대표 이권선 · 사업자등록번호 741-86-03645<br>
     경기도 안양시 동안구 시민대로 401, 2001호 · 통신판매업신고 2025-안양동안-0740<br>
     고객센터 <a href="tel:0261777350">02-6177-7350</a> · 개인정보 보호책임자 이권선 · <a href="mailto:ehdrhzle0915@gmail.com">ehdrhzle0915@gmail.com</a><br>
-    나눔 상품은 수량 소진 시 마감되고, 배송지 정보는 배송 목적으로만 씁니다. 광고 수신 동의는 가입 단계에서 따로 받습니다.
+    무료딜 상품은 수량 소진 시 마감되고, 배송지 정보는 배송 목적으로만 씁니다. 광고 수신 동의는 가입 단계에서 따로 받습니다.
   </div>
 </footer>
 
@@ -522,10 +527,21 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
   })();
 
 
+
+  // ── 12시간 타이머. 한국 시각 00:00·12:00 경계까지 남은 시간을 매초 그리고, 경계를 지나면 다음 12시간으로 다시 돈다 (루비 10-14) ──
+  (function(){
+    const P = 12*3600*1000, KST = 9*3600*1000, el = $('#tleft');
+    function draw(){
+      const t = Date.now() + KST, left = Math.ceil(t / P) * P - t;
+      const h = Math.floor(left/3600000), m = Math.floor(left%3600000/60000), s = Math.floor(left%60000/1000);
+      el.textContent = [h,m,s].map(n => String(n).padStart(2,'0')).join(':');
+    }
+    draw(); setInterval(draw, 1000);
+  })();
   // ── 나눔 두 칸 ──────────────────────────────────────────
   // ★자격 판정(누적 결제 3만원)은 여기서 하지 않는다. 여기서 하면 개발자도구로 뒤집힌다.
   //   서버(functions/v1/giveaway)가 원장을 읽어 판정하고, 이 코드는 그 결과를 그리기만 한다.
-  const GIVE = { now: '지금 나눔', next: '다음 나눔 예약' };
+  const GIVE = { now: '지금 무료딜', next: '다음 무료딜 예약' };
   let giveState = null;
 
   async function askGive(action, round) {
@@ -570,7 +586,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
       return { label: `담으러 가기 · ${won(me.shortfall)}원 남음`, go: 'checkout.html',
                note: `${won(threshold)}원 이상 구매하신 분부터 다음 회차 예약이 열립니다.` };
     if (!me.hasAddress)            return { label: '배송지 등록하고 신청', go: 'join.html' };
-    return { label: x.slot === 'now' ? '무료로 신청하기' : '예약하기', act: true };
+    return { label: x.slot === 'now' ? '무료딜 신청하기' : '예약하기', act: true };
   }
 
   function cardHTML(x, me, threshold) {
