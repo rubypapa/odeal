@@ -1,0 +1,103 @@
+<!-- ODEAL 상품 상세. ?k=키 하나로 products.json(이름·브랜드) + goods/index.json(긁어 둔 상단·상세 이미지·텍스트) + DB product_price(회원가)를 그린다. 2026-10-15 -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상품 상세 · ODEAL</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--ink:#17181A;--ink-2:#4A4B4F;--ink-3:#8A8B90;--page:#F6F6F3;--surface:#fff;--line:#E3E3DF;--line-2:#D2D2CC;--accent:#E8380D;--accent-soft:#FDECE7;--pink:#F470B8}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);font-family:"Pretendard Variable",Pretendard,-apple-system,sans-serif;letter-spacing:-.01em}
+a{color:inherit;text-decoration:none}
+.nav{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:5}
+.nav .in{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.04em}.logo b{color:var(--accent)}
+.back{font-size:14px;font-weight:700;color:var(--ink-2)}
+main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+.gal{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.gal .main{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#fff}
+.gal .main img{width:100%;height:100%;object-fit:contain}
+.gal .th{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line);overflow-x:auto}
+.gal .th img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;background:var(--page)}
+.gal .th img.on{border-color:var(--accent)}
+.brand{font-size:13px;font-weight:800;color:var(--accent)}
+h1{margin:8px 0 0;font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.3}
+.price{margin-top:18px;display:flex;align-items:baseline;gap:4px}.price b{font-size:30px;font-weight:800;letter-spacing:-.03em}.price span{font-size:16px;font-weight:700}
+.ship{margin-top:6px;font-size:13.5px;color:var(--ink-3)}
+.locked{font-size:16px;font-weight:800;color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 26px;border-radius:12px;border:0;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit}
+.btn-primary{background:var(--accent);color:#fff;margin-top:22px;width:100%}
+.btn-primary:disabled{background:var(--line-2)}
+.note{margin-top:12px;font-size:13px;color:var(--ink-3);line-height:1.6}
+.detail{margin-top:48px}
+.detail h2{font-size:18px;font-weight:800;letter-spacing:-.02em;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.detail .imgs{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:0}
+.detail .imgs img{max-width:860px;width:100%;display:block}
+.detail pre{margin-top:18px;white-space:pre-wrap;font-family:inherit;font-size:13.5px;line-height:1.7;color:var(--ink-2);background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+.src{margin-top:14px;font-size:12px;color:var(--ink-3)}
+.gate{max-width:520px;margin:80px auto;text-align:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:40px 24px}
+.gate h2{margin:0 0 8px;font-size:20px}.gate p{color:var(--ink-2);font-size:14.5px;line-height:1.7}
+.hide{display:none}
+@media(max-width:760px){.hero{grid-template-columns:1fr;gap:22px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="in"><a class="logo" href="/"><b>O</b>DEAL</a><a class="back" href="/#goods">← 오늘의 딜</a></div></header>
+<main>
+  <div class="gate hide" id="gate"><h2>회원만 볼 수 있습니다</h2><p>ODEAL 의 상품과 가격은 로그인한 회원에게만 열립니다.</p><a class="btn btn-primary" href="/#top" style="width:auto;padding:0 34px">로그인하러 가기</a></div>
+  <div class="gate hide" id="none"><h2>상품을 찾을 수 없습니다</h2><p>주소가 잘못됐거나 아직 준비 중인 상품입니다.</p><a class="btn btn-primary" href="/#goods" style="width:auto;padding:0 34px">오늘의 딜로</a></div>
+  <section class="hero hide" id="hero">
+    <div class="gal"><div class="main"><img id="mainimg" alt=""></div><div class="th" id="thumbs"></div></div>
+    <div>
+      <div class="brand" id="brand"></div>
+      <h1 id="name"></h1>
+      <div class="price" id="price"><span class="locked">회원 전용가</span></div>
+      <p class="ship" id="ship"></p>
+      <button class="btn btn-primary" id="buy" type="button" disabled>결제 준비 중</button>
+      <p class="note">결제는 전자결제 심사 뒤 열립니다. 표시 금액은 배송비를 포함한 총 결제 예정 금액입니다.</p>
+    </div>
+  </section>
+  <section class="detail hide" id="detail">
+    <h2>상세 정보</h2>
+    <div class="imgs" id="dimgs"></div>
+    <details><summary style="cursor:pointer;font-weight:700;margin-top:18px">상품 설명 텍스트</summary><pre id="dtext"></pre></details>
+    <p class="src" id="src"></p>
+  </section>
+</main>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const $ = s => document.querySelector(s); const C = window.ODEAL || {};
+const won = n => n.toLocaleString('ko-KR');
+const key = new URLSearchParams(location.search).get('k') || '';
+let sb = null; if (C.SUPABASE_URL && C.SUPABASE_ANON && window.supabase) sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON);
+(async () => {
+  const { data } = sb ? await sb.auth.getUser() : { data: {} };
+  if (!data || !data.user) { $('#gate').classList.remove('hide'); return; }        // 비회원은 아무것도 안 본다 (루비 10-14)
+  const [prods, idx] = await Promise.all([fetch('products.json').then(r => r.json()), fetch('goods/index.json').then(r => r.json()).catch(() => ({}))]);
+  const p = prods.find(x => x.key === key); const g = idx[key] || { top: [], detail: [], text: '' };
+  if (!p) { $('#none').classList.remove('hide'); return; }
+  document.title = `${p.name} · ODEAL`;
+  $('#brand').textContent = p.brand; $('#name').textContent = p.name;
+  const imgs = [...g.top, ...(g.top.length ? [] : (p.img ? [p.img] : []))];
+  if (imgs.length) { $('#mainimg').src = imgs[0]; $('#thumbs').innerHTML = imgs.map((u, i) => `<img src="${u}" class="${i ? '' : 'on'}" alt="">`).join('');
+    $('#thumbs').querySelectorAll('img').forEach(t => t.addEventListener('click', () => { $('#mainimg').src = t.src; $('#thumbs').querySelectorAll('img').forEach(x => x.classList.toggle('on', x === t)); })); }
+  $('#hero').classList.remove('hide');
+  if (g.detail.length || g.text) {
+    $('#dimgs').innerHTML = g.detail.map(u => `<img src="${u}" loading="lazy" alt="">`).join('');
+    $('#dtext').textContent = g.text || '';
+    $('#src').textContent = g.source ? '출처 · ' + g.source : '';
+    $('#detail').classList.remove('hide');
+  }
+  const { data: rows } = await sb.from('product_price').select('key,price,ship').eq('key', key);
+  const r = rows && rows[0];
+  if (r) { $('#price').innerHTML = `<b>${won(r.price + r.ship)}</b><span>원</span>`; $('#ship').textContent = `상품 ${won(r.price)}원 + 배송비 ${won(r.ship)}원`; }
+  else { $('#price').innerHTML = '<span class="locked">가격 준비 중</span>'; }
+})();
+</script>
+</body>
+</html>
