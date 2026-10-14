@@ -289,7 +289,8 @@ $('#back').addEventListener('click', () => go(1));
 (async () => {
   if (!sb) return;
   const { data } = await sb.auth.getUser();
-  if (data && data.user) {
+  // ?new=1 이면 로그인돼 있어도 1단계(이메일 가입 칸)를 보여 준다 — 심사용 계정을 따로 만들 때 (2026-10-15)
+  if (data && data.user && !new URLSearchParams(location.search).has('new')) {
     const u = data.user;
     myId = u.id;                                   // 배송지를 이 계정에 묶는다
     setWho(u.email || (u.user_metadata && u.user_metadata.name) || '로그인됨');
