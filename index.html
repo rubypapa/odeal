@@ -238,7 +238,8 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .hide{display:none}
 .give{border-top:1px solid var(--line)}
 /* 비회원 = 로그인 전. 히어로만 보이고 나머지 구역은 로그인해야 열린다 (루비 10-14) */
-body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.guest .nav-links{display:none}
+/* 비회원 = 타이머·무료딜 사진·로그인 단추만 (루비 10-14 「시간제한이랑 무료상품노출만 · 다른건 아무것도 안보이게」) */
+body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.guest footer,body.guest .nav-links,body.guest .btn-lock,body.guest #authnote,body.guest #eyebrow{display:none!important}
 .slides{position:relative;aspect-ratio:832/489;background:#FFF6F7;overflow:hidden}   /* 배경 = gif 모서리 색 */
 .slides .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s;aspect-ratio:auto}
 .slides .slide.on{opacity:1}
