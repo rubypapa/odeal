@@ -57,7 +57,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 
 /* ── 히어로. 무료 나눔 한 덩어리. 텍스트 요소 4개를 안 넘긴다 ── */
 .hero{padding:56px 0 72px}
-.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:56px;align-items:center}
+.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:56px;align-items:center}
+.hero-left .hero-card{margin-top:0}
+.hero-right h1{margin-top:0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 14px;border-radius:var(--r-pill);
   background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:800;letter-spacing:-.01em}
 .hero h1{margin-top:20px;font-size:clamp(34px,3.9vw,52px);line-height:1.16;letter-spacing:-.045em;font-weight:800}
@@ -267,9 +269,26 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
   <!-- 히어로. 광고가 데려온 사람이 여기서 바로 가입하고 무료딜을 받는다 (8-13 원본 형식 · 10-14 무드키보드) -->
   <section class="hero">
     <div class="shell hero-grid">
-      <div>
+      <div class="hero-left">
         <div class="timer" id="timer"><span class="tlabel">이번 무료딜 마감까지</span><b class="num" id="tleft">--:--:--</b><span class="tsep">·</span><span class="tlabel">한정수량 <b class="num">1,000개</b></span></div>
         <span class="eyebrow hide" id="eyebrow">오늘 무료딜 남은 수량 <b class="num" id="left">-</b>개</span>
+        <figure class="hero-card">
+        <span class="tag-free">오늘만 0원</span>
+        <img src="img/keyboard_4set.webp" alt="릴리바이레드 무드키보드 4종 제품 사진" width="832" height="489">
+        <figcaption class="hero-card-body">
+          <h3>릴리바이레드 무드키보드 · 4종 중 랜덤 1개</h3>
+          <div class="priceline">
+            <span class="price-now num">0원</span>
+            <span class="price-note">+ 배송비 3,000원</span>
+          </div>
+          <div class="stock hide" id="stock">
+            <div class="bar"><span id="stockbar"></span></div>
+            <div class="stock-txt"><span id="stocktxt"></span><span class="num">수량 소진 시 마감</span></div>
+          </div>
+        </figcaption>
+      </figure>
+      </div>
+      <div class="hero-right">
         <h1>오늘의 오딜은?<br><em class="lb">릴바 무드키보드</em></h1>
                 <div class="gate">
           <div class="auth" id="auth">
@@ -286,22 +305,6 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
           <a class="btn btn-guest" href="#goods">계정 없이 비회원으로 둘러보기</a>
         </div>
       </div>
-
-      <figure class="hero-card">
-        <span class="tag-free">상품값 0원</span>
-        <img src="img/keyboard_4set.webp" alt="릴리바이레드 무드키보드 4종 제품 사진" width="832" height="489">
-        <figcaption class="hero-card-body">
-          <h3>릴리바이레드 무드키보드 · 4종 중 랜덤 1개</h3>
-          <div class="priceline">
-            <span class="price-now num">0원</span>
-            <span class="price-note">+ 배송비 3,000원</span>
-          </div>
-          <div class="stock hide" id="stock">
-            <div class="bar"><span id="stockbar"></span></div>
-            <div class="stock-txt"><span id="stocktxt"></span><span class="num">수량 소진 시 마감</span></div>
-          </div>
-        </figcaption>
-      </figure>
     </div>
   </section>
 
