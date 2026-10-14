@@ -237,7 +237,8 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 
 .hide{display:none}
 .give{border-top:1px solid var(--line)}
-.btn-guest{margin-top:4px}
+/* 비회원 = 로그인 전. 히어로만 보이고 나머지 구역은 로그인해야 열린다 (루비 10-14) */
+body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.guest .nav-links{display:none}
 .slides{position:relative;aspect-ratio:832/489;background:#FFF6F7;overflow:hidden}   /* 배경 = gif 모서리 색 */
 .slides .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s;aspect-ratio:auto}
 .slides .slide.on{opacity:1}
@@ -249,7 +250,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .timer .tlabel b{color:#FFD84D}
 </style>
 </head>
-<body>
+<body class="guest">
 <header class="nav">
   <div class="shell nav-in">
     <div class="brand">
@@ -316,7 +317,6 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
             <div class="st-grid" id="st-grid"></div>
             <div class="st-foot"><span>매일 들르면 1개 · 카카오 공유 1개 · 구매하면 더</span><a class="go" href="#give">무료딜 신청</a></div>
           </div>
-          <a class="btn btn-guest" href="#goods">계정 없이 비회원으로 둘러보기</a>
         </div>
       </div>
     </div>
@@ -499,7 +499,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
     $('#authnote').classList.toggle('hide', on);
     $('#signed').classList.toggle('hide', !on);
     $('#navlogin').textContent = on ? '로그아웃' : '로그인';
-    $('.btn-guest').classList.toggle('hide', on);   // 로그인 뒤엔 비회원 둘러보기 줄을 숨겨 달력이 사진 카드 바닥까지 선다
+    document.body.classList.toggle('guest', !on);   // 비회원은 히어로(로그인)만 본다 (루비 10-14 「애초에 비회원은 볼수없게」)
     if (on) $('#navlogin').dataset.on = '1'; else delete $('#navlogin').dataset.on;
     if (!on) return;
     stamps(user).catch(e => console.warn('스탬프', e));
