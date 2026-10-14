@@ -234,7 +234,11 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .hide{display:none}
 .give{border-top:1px solid var(--line)}
 .btn-guest{margin-top:4px}
-.hero-card img{height:auto;aspect-ratio:832/489;object-fit:contain;background:#fff}   /* 흰 띠를 잘라낸 누끼(832×489)를 그대로 · 카드 전체가 정사각에 가깝다 */
+.slides{position:relative;aspect-ratio:832/489;background:#FFF6F7;overflow:hidden}   /* 배경 = gif 모서리 색 */
+.slides .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s;aspect-ratio:auto}
+.slides .slide.on{opacity:1}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:2}
+.dots b{width:7px;height:7px;border-radius:50%;background:rgba(0,0,0,.22);cursor:pointer}.dots b.on{background:#F470B8}
 .timer{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:14px;padding:10px 14px;border-radius:12px;background:#1b1b1b;color:#fff;font-size:14px;font-weight:700}
 .timer #tleft{font-size:22px;letter-spacing:.02em;color:#FFD84D}
 .timer .tsep{opacity:.5}
@@ -274,7 +278,14 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
         <span class="eyebrow hide" id="eyebrow">오늘 무료딜 남은 수량 <b class="num" id="left">-</b>개</span>
         <figure class="hero-card">
         <span class="tag-free">오늘만 0원</span>
-        <img src="img/keyboard_4set.webp" alt="릴리바이레드 무드키보드 4종 제품 사진" width="832" height="489">
+        <!-- 슬라이드. 첫 장 = 올리브영 상세의 움직이는 발색 컷(상세_15.gif → 애니메이션 webp) · 루비 10-14 「이미지 슬라이드식 · gif 움직임파일을 메인으로」 -->
+        <div class="slides" id="slides">
+          <img class="slide on" src="img/kb_move_15.webp" alt="무드키보드 쿠션 글리터 발색" width="900" height="380">
+          <img class="slide" src="img/keyboard_4set.webp" alt="릴리바이레드 무드키보드 4종 제품 사진" width="832" height="489" loading="lazy">
+          <img class="slide" src="img/kb_move_17.webp" alt="무드키보드 새틴 시머 발색" width="900" height="380" loading="lazy">
+          <img class="slide" src="img/kb_move_19.webp" alt="무드키보드 팔레트" width="900" height="380" loading="lazy">
+          <div class="dots" id="dots"></div>
+        </div>
         <figcaption class="hero-card-body">
           <h3>릴리바이레드 무드키보드 · 4종 중 랜덤 1개</h3>
           <div class="priceline">
@@ -571,6 +582,16 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 
 
 
+  // ── 사진 슬라이드. 4초마다 다음 장, 점을 누르면 그 장 (루비 10-14) ──
+  (function(){
+    const sl = [...document.querySelectorAll('#slides .slide')], dots = $('#dots'); let i = 0, t;
+    dots.innerHTML = sl.map((_, k) => `<b${k ? '' : ' class="on"'}></b>`).join('');
+    const db = [...dots.children];
+    function show(k){ i = (k + sl.length) % sl.length; sl.forEach((e, j) => e.classList.toggle('on', j === i)); db.forEach((e, j) => e.classList.toggle('on', j === i)); }
+    function arm(){ clearInterval(t); t = setInterval(() => show(i + 1), 4000); }
+    db.forEach((d, k) => d.addEventListener('click', () => { show(k); arm(); }));
+    arm();
+  })();
   // ── 12시간 타이머. 한국 시각 00:00·12:00 경계까지 남은 시간을 매초 그리고, 경계를 지나면 다음 12시간으로 다시 돈다 (루비 10-14) ──
   (function(){
     const P = 12*3600*1000, KST = 9*3600*1000, el = $('#tleft');
