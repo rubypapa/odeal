@@ -61,6 +61,14 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
 .tag{font-size:12.5px;font-weight:800;margin-right:5px}
 .tag.req{color:var(--accent)} .tag.opt{color:var(--ink-3)}
 .nudge{margin-top:11px;padding:13px 15px;border-radius:10px;background:var(--accent-soft);font-size:13.5px;color:#8C2409;font-weight:600}
+.emailgate{margin-top:18px;border-top:1px solid var(--line-2);padding-top:14px}
+.emailgate>summary{cursor:pointer;font-size:14px;color:#6b6b6b;list-style:none}
+.emailgate>summary::-webkit-details-marker{display:none}
+.emailgate>summary::after{content:' ▾'}
+.emailgate[open]>summary::after{content:' ▴'}
+.emailgate .ef{margin-top:12px;display:flex;flex-direction:column;gap:9px}
+.emailgate .row2{display:flex;gap:9px}
+.emailgate .row2 .btn{flex:1}
 .legal{margin-top:13px;font-size:12.5px;color:var(--ink-3);line-height:1.7}
 .recap{margin-top:20px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .recap div{display:flex;gap:14px;padding:13px 15px;border-top:1px solid var(--line);font-size:14.5px}
@@ -107,6 +115,22 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
       <button class="btn guest" id="guest" type="button">계정 없이 계속하기</button>
     </div>
     <p class="legal">비밀번호는 카카오·구글에 입력하며 ODEAL은 그 값을 보지 않습니다.</p>
+
+    <!-- ★이메일 로그인. 소셜만 두면 전자결제 심사에서 테스트 계정을 낼 수 없다
+         (토스 신청서 「회원 전용 쇼핑몰」= 테스트 계정 ID·비밀번호 필수 · 2026-10-14). 비밀번호는 Supabase 인증이
+         해시로 보관하며 우리 서버·이 코드에는 남지 않는다. 기본으로 펼쳐 둔다 — 접혀 있으면 심사자가 못 찾는다. -->
+    <details class="emailgate" id="emailgate" open>
+      <summary>이메일로 로그인</summary>
+      <div class="ef">
+        <input class="in" id="em" type="email" autocomplete="email" placeholder="이메일" spellcheck="false">
+        <input class="in" id="pw" type="password" autocomplete="current-password" placeholder="비밀번호 (6자 이상)">
+        <div class="row2">
+          <button class="btn btn-lg" id="emlogin" type="button">로그인</button>
+          <button class="btn" id="emjoin" type="button">계정 만들기</button>
+        </div>
+        <p class="err" id="e-em" style="display:none"></p>
+      </div>
+    </details>
   </section>
 
   <section class="card hide" id="s2">
@@ -187,6 +211,36 @@ if (C.SUPABASE_URL && C.SUPABASE_ANON && !window.__nosb && window.supabase) {
 }
 $('#kakao').disabled = !sb;                       // 카카오는 토큰 교환에 서버가 필요하다
 $('#google').disabled = !(sb || C.GOOGLE_CLIENT_ID);
+$('#emlogin').disabled = !sb; $('#emjoin').disabled = !sb;
+
+/* ★이메일 로그인. 전자결제 심사가 ★소셜이 아닌 테스트 계정을 요구해서 열었다(2026-10-14).
+   비밀번호는 Supabase 인증으로 바로 가고 우리 서버·이 코드에는 남지 않는다. */
+function 이메일오류(m){ const e = $('#e-em'); e.textContent = m; e.style.display = m ? 'block' : 'none'; }
+function 이메일값(){
+  const em = $('#em').value.trim(), pw = $('#pw').value;
+  if (!em || em.indexOf('@') < 0) { 이메일오류('이메일을 정확히 입력해 주세요.'); return null; }
+  if (pw.length < 6) { 이메일오류('비밀번호는 6자 이상입니다.'); return null; }
+  이메일오류(''); return { email: em, password: pw };
+}
+function 이메일로그인끝(u){ myId = u.id; setWho(u.email || '로그인됨'); }
+$('#emlogin').addEventListener('click', async () => {
+  const v = 이메일값(); if (!v || !sb) return;
+  $('#emlogin').disabled = true;
+  const { data, error } = await sb.auth.signInWithPassword(v);
+  $('#emlogin').disabled = false;
+  if (error) { 이메일오류('로그인 실패: ' + error.message); return; }
+  if (data && data.user) 이메일로그인끝(data.user);
+});
+$('#emjoin').addEventListener('click', async () => {
+  const v = 이메일값(); if (!v || !sb) return;
+  $('#emjoin').disabled = true;
+  const { data, error } = await sb.auth.signUp({ email: v.email, password: v.password });
+  $('#emjoin').disabled = false;
+  if (error) { 이메일오류('계정 만들기 실패: ' + error.message); return; }
+  /* 확인 메일을 요구하는 설정이면 session 이 없다. 그때는 메일을 열어야 한다고 알린다. */
+  if (data && data.session && data.user) 이메일로그인끝(data.user);
+  else 이메일오류('가입 확인 메일을 보냈습니다. 메일의 링크를 누른 뒤 다시 로그인해 주세요.');
+});
 $('#savenote').textContent = sb
   ? "등록하면 서울 리전 데이터베이스에 저장됩니다. 본인 외에는 조회할 수 없습니다."
   : "지금은 저장소가 연결되지 않아 이 브라우저에서만 확인됩니다.";
