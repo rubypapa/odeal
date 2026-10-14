@@ -2,8 +2,8 @@
 // 카카오·구글 클라이언트 정보는 여기가 아니라 Supabase 대시보드(Authentication > Providers)에 넣는다.
 window.ODEAL = {
   // Supabase (리전 = Northeast Asia / Seoul, ap-northeast-2)
-  SUPABASE_URL: "https://rkzcclmcqnyzkyvmovft.supabase.co",
-  SUPABASE_ANON: "sb_publishable_3jpxigblPdd5vhdv3nvmCQ_ZBs2nWle",
+  SUPABASE_URL: "https://qebgaupegdpnlsutaqow.supabase.co",
+  SUPABASE_ANON: "sb_publishable_lYIDacOue4gawoQfuty2Lw_8Lz3NtrW",
 
   // 토스페이먼츠 클라이언트 키. ★공개 키다(결제창을 띄우는 용도).
   // 시크릿 키는 여기 없다 — Supabase 함수 환경변수(PG_SECRET_KEY)에만 있다.
