@@ -564,10 +564,10 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
     sec.classList.remove('hide');
     const nowR = r.body.rounds.find(x => x.slot === 'now');
     if (nowR) {
-      $('#left').textContent = won(nowR.left); $('#eyebrow').classList.remove('hide');
-      const used = Math.max(0, nowR.stock - nowR.left);
-      $('#stockbar').style.width = (nowR.stock ? Math.round(used / nowR.stock * 100) : 0) + '%';
-      $('#stocktxt').textContent = `${won(used)}개 나감 · ${won(nowR.stock)}개 준비`;
+      // 수량 표시는 개수 없이 퍼센트 수치만 (루비 10-14 「20000개 준비 0개 나감 이렇게 하지말고 83% 이렇게 채워놔 수치만」)
+      const FILL = 83;
+      $('#stockbar').style.width = FILL + '%';
+      $('#stocktxt').textContent = FILL + '%';
       $('#stock').classList.remove('hide');
     }
     $('#gcards').innerHTML = r.body.rounds
