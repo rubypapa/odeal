@@ -499,6 +499,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
     $('#authnote').classList.toggle('hide', on);
     $('#signed').classList.toggle('hide', !on);
     $('#navlogin').textContent = on ? '로그아웃' : '로그인';
+    $('.btn-guest').classList.toggle('hide', on);   // 로그인 뒤엔 비회원 둘러보기 줄을 숨겨 달력이 사진 카드 바닥까지 선다
     if (on) $('#navlogin').dataset.on = '1'; else delete $('#navlogin').dataset.on;
     if (!on) return;
     stamps(user).catch(e => console.warn('스탬프', e));
