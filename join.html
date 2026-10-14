@@ -55,6 +55,7 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
 .agree{margin-top:24px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .ag{display:flex;gap:11px;padding:15px;border-top:1px solid var(--line);align-items:flex-start}
 .ag:first-child{border-top:0;background:var(--page)}
+.ag.media{padding:10px 15px 10px 48px;border-top:0;background:#FAFAF7}.ag.media label{font-size:14px}
 .ag input{width:21px;height:21px;margin:1px 0 0;accent-color:var(--accent);flex:none;cursor:pointer}
 .ag label{font-size:14.5px;cursor:pointer;flex:1}
 .ag:first-child label{font-weight:800;font-size:15.5px}
@@ -158,7 +159,12 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
         <div class="ag"><input type="checkbox" id="all"><label for="all">아래 항목에 모두 동의합니다</label></div>
         <div class="ag"><input type="checkbox" id="a1"><label for="a1"><span class="tag req">필수</span>개인정보 수집·이용 동의 (이름·연락처·주소 / 배송 목적 / 배송 후 30일 뒤 분리 보관, 전자상거래법이 정한 기간까지 보존 후 삭제) <a href="privacy.html" target="_blank" style="text-decoration:underline;text-underline-offset:3px">전문 보기</a></label></div>
         <div class="ag"><input type="checkbox" id="a2"><label for="a2"><span class="tag req">필수</span>만 14세 이상이며 <a href="terms.html" target="_blank" style="text-decoration:underline;text-underline-offset:3px">이용약관</a>에 동의합니다</label></div>
-        <div class="ag"><input type="checkbox" id="a3"><label for="a3"><span class="tag opt">선택</span>할인·오픈 소식을 문자와 알림톡으로 받겠습니다. 동의하지 않아도 신청은 그대로 됩니다</label></div>
+        <div class="ag"><input type="checkbox" id="a3"><label for="a3"><span class="tag opt">선택</span>ODEAL 의 <b>광고성 정보 수신</b>에 동의합니다 (할인·오픈 소식). 동의하지 않아도 신청은 그대로 됩니다</label></div>
+        <!-- ★매체별 동의. KISA 안내서 7차 p14 「수신 희망 매체를 선택하여 동의하도록 권장 · 동의한 매체에 한해 전송」(2026-10-14).
+             로그인 수단(카카오·구글·이메일)과 무관하게 모두 같은 칸을 본다. -->
+        <div class="ag media"><input type="checkbox" id="m1"><label for="m1">문자(SMS)</label></div>
+        <div class="ag media"><input type="checkbox" id="m2"><label for="m2">카카오톡 (ODEAL 카카오톡 채널 메시지)</label></div>
+        <div class="ag media"><input type="checkbox" id="m3"><label for="m3">이메일</label></div>
       </div>
       <div class="nudge">다음 소식은 <b>알림 받는 분께 먼저</b> 갑니다.</div>
       <div class="gate">
@@ -325,6 +331,11 @@ $('#findzip').addEventListener('click', () => {
 const boxes = ['a1','a2','a3'].map(i => $('#'+i));
 $('#all').addEventListener('change', e => { boxes.forEach(b => b.checked = e.target.checked); check(); });
 boxes.forEach(b => b.addEventListener('change', () => { $('#all').checked = boxes.every(x => x.checked); check(); }));
+/* 광고 동의(a3) ↔ 매체(m1~m3). a3 를 켜면 셋 다, 끄면 셋 다 끈다. 매체를 하나라도 켜면 a3 가 켜진다. */
+const media = ['m1','m2','m3'].map(id => $('#'+id));
+$('#a3').addEventListener('change', e => { media.forEach(m => m.checked = e.target.checked); });
+media.forEach(m => m.addEventListener('change', () => { $('#a3').checked = media.some(x => x.checked); $('#all').checked = boxes.every(x => x.checked); }));
+$('#all').addEventListener('change', e => { media.forEach(m => m.checked = e.target.checked); });
 const valid = () => $('#name').value.trim().length >= 2
   && $('#tel').value.replace(/\D/g,'').length === 11
   && $('#addr1').value.trim() !== '' && $('#a1').checked && $('#a2').checked;
@@ -350,8 +361,13 @@ $('#form').addEventListener('submit', async e => {
     addr1: $('#addr1').value,
     addr2: $('#addr2').value,
     memo: $('#memo').value,
-    marketing: $('#a3').checked,
+    // 광고성 정보 수신 동의 — 매체별(KISA 안내서 7차 p14). marketing = 하나라도 동의. marketing_at = 동의 시각(시행령 62조의3 · 2년마다 확인용)
+    marketing: $('#a3').checked && ($('#m1').checked || $('#m2').checked || $('#m3').checked),
+    marketing_sms: $('#a3').checked && $('#m1').checked,
+    marketing_kakao: $('#a3').checked && $('#m2').checked,
+    marketing_email: $('#a3').checked && $('#m3').checked,
   };
+  rec.marketing_at = rec.marketing ? new Date().toISOString() : null;
 
   let saved = '이 브라우저에만 (저장소 미연결)';
   if (sb) {
@@ -365,7 +381,7 @@ $('#form').addEventListener('submit', async e => {
   $('#r-name').textContent = rec.name;
   $('#r-tel').textContent  = rec.tel;
   $('#r-addr').textContent = `(${rec.zip}) ${rec.addr1} ${rec.addr2}`.trim();
-  $('#r-ad').textContent   = rec.marketing ? '문자·알림톡 받음' : '받지 않음';
+  $('#r-ad').textContent   = rec.marketing ? [rec.marketing_sms && '문자', rec.marketing_kakao && '카카오톡', rec.marketing_email && '이메일'].filter(Boolean).join('·') + ' 받음' : '받지 않음';
   $('#r-save').textContent = saved;
   // ★4단계 전환: 배송지까지 입력한 사람 = 구매 의사가 가장 뚜렷한 층
   if (window.ODEAL_TRACK) window.ODEAL_TRACK.shipping();
