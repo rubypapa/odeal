@@ -240,7 +240,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .give{border-top:1px solid var(--line)}
 /* 비회원 = 로그인 전. 히어로만 보이고 나머지 구역은 로그인해야 열린다 (루비 10-14) */
 /* 비회원 = 타이머·무료딜 사진·로그인 단추만 (루비 10-14 「시간제한이랑 무료상품노출만 · 다른건 아무것도 안보이게」) */
-body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.guest footer,body.guest .nav-links,body.guest .btn-lock,body.guest #authnote,body.guest #eyebrow{display:none!important}
+body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.guest .nav-links,body.guest .btn-lock,body.guest #authnote,body.guest #eyebrow{display:none!important}   /* 푸터(사업자 정보)는 비회원에게도 — 전자상거래법 §10 · 토스 심사 안내 */
 .slides{position:relative;aspect-ratio:832/489;background:#FFF6F7;overflow:hidden}   /* 배경 = gif 모서리 색 */
 .slides .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s;aspect-ratio:auto}
 .slides .slide.on{opacity:1}
@@ -284,7 +284,7 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
         <div class="timer" id="timer"><span class="tlabel">이번 무료딜 마감까지</span><b class="num" id="tleft">--:--:--</b><span class="tsep">·</span><span class="tlabel">한정수량 <b class="num">1,000개</b></span></div>
         <span class="eyebrow hide" id="eyebrow">오늘 무료딜 남은 수량 <b class="num" id="left">-</b>개</span>
         <figure class="hero-card">
-        <span class="tag-free">오늘만 0원</span>
+        <span class="tag-free">오늘만 3,000원</span>
         <!-- 슬라이드. 첫 장 = 올리브영 상세의 움직이는 발색 컷(상세_15.gif → 애니메이션 webp) · 루비 10-14 「이미지 슬라이드식 · gif 움직임파일을 메인으로」 -->
         <div class="slides" id="slides">
           <img class="slide on" src="img/kb_move_15.webp" alt="무드키보드 쿠션 글리터 발색" width="900" height="380">
@@ -296,8 +296,8 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
         <figcaption class="hero-card-body">
           <h3>릴리바이레드 무드키보드 · 4종 중 랜덤 1개</h3>
           <div class="priceline">
-            <span class="price-now num">0원</span>
-            <span class="price-note">+ 배송비 3,000원</span>
+            <span class="price-now num">3,000원</span>
+            <span class="price-note">배송비 무료</span>
           </div>
           <div class="stock hide" id="stock">
             <div class="bar"><span id="stockbar"></span></div>
