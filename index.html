@@ -98,6 +98,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .pick-box{width:min(420px,100%);background:#fff;border-radius:18px;padding:24px 20px 16px;display:flex;flex-direction:column;gap:10px}
 .pick-t{font-size:18px;font-weight:800;letter-spacing:-.03em}
 .pick-s{margin:-4px 0 6px;font-size:13.5px;color:var(--ink-2)}
+.pick-email{justify-content:center;text-decoration:none}
 .pick-x{margin-top:4px;height:40px;border:0;background:none;color:var(--ink-3);font:inherit;font-size:14px;cursor:pointer}
 .stock{margin-top:14px}
 .bar{height:6px;border-radius:var(--r-pill);background:var(--line);overflow:hidden}
@@ -350,6 +351,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
     <p class="pick-s">로그인하면 바로 회원이 되고 오늘 스탬프가 찍힙니다.</p>
     <button class="btn btn-lg btn-kakao" type="button" id="pick-kakao">카카오로 3초 만에 받기</button>
     <button class="btn btn-lg btn-google" type="button" id="pick-google">구글로 3초 만에 받기</button>
+    <a class="btn btn-lg btn-ghost pick-email" href="join.html?email=1">이메일로 로그인</a>   <!-- 토스 심사용 테스트 계정(이메일) 진입 (루비 10-15) -->
     <button class="pick-x" type="button" id="pick-x">닫기</button>
   </div>
 </div>
@@ -387,8 +389,9 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
   $('#google').addEventListener('click', () => login('google'));
   // 우측 상단 단추 : 로그인 전엔 로그인 자리로, 로그인 뒤엔 「로그아웃」 (루비 10-14 「우측상단에는 로그인버튼 그대로있어」)
   $('#navlogin').addEventListener('click', async (e) => {
-    if (!$('#navlogin').dataset.on) return;
-    e.preventDefault(); await sb.auth.signOut(); paint(null);
+    e.preventDefault();
+    if (!$('#navlogin').dataset.on) { $('#pick').classList.remove('hide'); return; }   // 로그인 전 = 고르기 창 (루비 10-15 「우측상단 로그인버튼도 작동안함」)
+    await sb.auth.signOut(); paint(null);
   });
 
   /* 스탬프 달력. ① 오늘 login 스탬프를 넣고(이미 있으면 무시) ② 이달 스탬프를 읽어 ③ 달력에 찍는다. 날짜는 한국 시각. */
