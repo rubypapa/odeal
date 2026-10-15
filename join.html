@@ -302,7 +302,8 @@ $('#back').addEventListener('click', () => go(1));
   if (!sb) return;
   const { data } = await sb.auth.getUser();
   // ?new=1 이면 로그인돼 있어도 1단계(이메일 가입 칸)를 보여 준다 — 심사용 계정을 따로 만들 때 (2026-10-15)
-  if (data && data.user && !Q.has('new')) {
+  if (data && data.user && !Q.has('new') && !로그인처리됨) {
+    로그인처리됨 = true;
     로그인뒤(data.user);                            // 배송지 화면이면 2단계, 아니면 홈으로
   }
   dropProviderToken();
@@ -321,7 +322,12 @@ function dropProviderToken(){
     localStorage.setItem(k, JSON.stringify(v));
   } catch (_) { /* 저장 형식이 바뀌면 조용히 넘어간다. 지우기 실패가 로그인을 막으면 안 된다 */ }
 }
-if (sb) sb.auth.onAuthStateChange(() => dropProviderToken());
+let 로그인처리됨 = false;
+if (sb) sb.auth.onAuthStateChange((ev, session) => {
+  dropProviderToken();
+  // 소셜 로그인에서 돌아온 직후 getUser 보다 늦게 세션이 잡히는 경우를 받는다 (10-15 · 「아직도 배송지 적으라고 뜬다」 뒤 보강)
+  if (ev === 'SIGNED_IN' && session && session.user && !로그인처리됨 && !Q.has('new')) { 로그인처리됨 = true; 로그인뒤(session.user); }
+});
 
 /* ── 입력 편의 ─────────────────────────────────────────── */
 $('#tel').addEventListener('input', e => {
