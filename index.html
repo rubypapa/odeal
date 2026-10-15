@@ -92,9 +92,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .price-was{font-size:15px;color:var(--ink-3);text-decoration:line-through}
 .price-now{font-size:26px;font-weight:800;color:var(--accent);letter-spacing:-.03em}
 .price-note{font-size:13.5px;color:var(--ink-2)}
-/* 「로그인하고 스탬프 받기」를 누르면 로그인 단추 칸(#auth)으로 옮겨 가며 두 번 깜빡인다 (루비 10-15 「아무 기능을 안 해」) */
-#auth:target .btn-lg{animation:odeal-pulse .7s ease 2}
-@keyframes odeal-pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,56,13,0)}50%{box-shadow:0 0 0 6px rgba(232,56,13,.35)}}
+/* 로그인 고르기 창 (루비 10-15) */
+.pick{position:fixed;inset:0;z-index:50;background:rgba(23,24,26,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.pick.hide{display:none}
+.pick-box{width:min(420px,100%);background:#fff;border-radius:18px;padding:24px 20px 16px;display:flex;flex-direction:column;gap:10px}
+.pick-t{font-size:18px;font-weight:800;letter-spacing:-.03em}
+.pick-s{margin:-4px 0 6px;font-size:13.5px;color:var(--ink-2)}
+.pick-x{margin-top:4px;height:40px;border:0;background:none;color:var(--ink-3);font:inherit;font-size:14px;cursor:pointer}
 .stock{margin-top:14px}
 .bar{height:6px;border-radius:var(--r-pill);background:var(--line);overflow:hidden}
 .bar span{display:block;height:100%;width:0;border-radius:var(--r-pill);background:var(--accent)}
@@ -339,6 +343,16 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
   </div>
 </section><!--/GOODS-->
 </main>
+<!-- 로그인 고르기 창 — 히어로 「로그인하고 스탬프 받기」를 누르면 카카오/구글 중 고른다 (루비 10-15 「카카오나 구글 선택하도록 해야」) -->
+<div class="pick hide" id="pick" role="dialog" aria-modal="true" aria-label="로그인 방법 고르기">
+  <div class="pick-box">
+    <p class="pick-t">어디로 로그인할까요?</p>
+    <p class="pick-s">로그인하면 바로 회원이 되고 오늘 스탬프가 찍힙니다.</p>
+    <button class="btn btn-lg btn-kakao" type="button" id="pick-kakao">카카오로 3초 만에 받기</button>
+    <button class="btn btn-lg btn-google" type="button" id="pick-google">구글로 3초 만에 받기</button>
+    <button class="pick-x" type="button" id="pick-x">닫기</button>
+  </div>
+</div>
 <footer><div>
   주식회사 와이엘트레이딩 · 대표 이권선 · 사업자등록번호 741-86-03645 · 통신판매업신고 2025-안양동안-0740 · <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=7418603645" target="_blank" rel="noopener">사업자정보확인</a><br>
   경기도 안양시 동안구 시민대로 401, 2001호(관양동, 대륭테크노타운15차)· 고객센터 02-6177-7350 · 전자우편 ehdrhzle0915@gmail.com<br>
@@ -570,17 +584,24 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
     const a = giveAction(nowR, r.body.me, r.body.threshold);
     const btn = a.act
       ? `<button class="gbtn" type="button" data-give-round="${nowR.round}">${a.label}</button>`
+      : a.pick
+        ? `<button class="gbtn" type="button" data-pick="1">${a.label}</button>`
       : a.done
         ? `<button class="gbtn ghost" type="button" disabled>${a.label}</button>`
         : `<a class="gbtn ghost" href="${a.go}">${a.label}</a>`;
     box.innerHTML = btn + `<p class="gnote"${a.note ? '' : ' hidden'}>${a.note || ''}</p>`;
     box.querySelectorAll('[data-give-round]').forEach(b =>
       b.addEventListener('click', () => onGive(+b.dataset.giveRound)));
+    box.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => $('#pick').classList.remove('hide')));
   }
+  $('#pick-kakao').addEventListener('click', () => login('kakao'));
+  $('#pick-google').addEventListener('click', () => login('google'));
+  $('#pick-x').addEventListener('click', () => $('#pick').classList.add('hide'));
+  $('#pick').addEventListener('click', e => { if (e.target === $('#pick')) $('#pick').classList.add('hide'); });
 
   // 버튼 하나가 상황마다 다른 말을 한다. 막힌 이유를 버튼에 그대로 적어야 다음 행동이 보인다.
   function giveAction(x, me, threshold) {
-    if (!me.signedIn)              return { label: '로그인하고 스탬프 받기', go: '#auth' };   // 루비 10-15 · 전엔 #top 이라 눌러도 아무 일이 없었다 → 로그인 단추 칸으로
+    if (!me.signedIn)              return { label: '로그인하고 스탬프 받기', pick: true };   // 루비 10-15 · 카카오/구글 고르는 창을 연다(전엔 #top 이라 눌러도 아무 일이 없었다)
     if (me.entered.includes(x.round)) return { label: '신청 완료', done: true };
     if (x.left <= 0)               return { label: '마감', done: true };
     if (x.slot === 'next' && !me.eligible)
