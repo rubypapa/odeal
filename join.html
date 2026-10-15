@@ -204,7 +204,7 @@ let sb = null, me = null, myId = null;
 /* ── 무엇이 설정 안 됐는지 화면에 그대로 띄운다 ─────────────── */
 const missing = [];
 if (!C.SUPABASE_URL || !C.SUPABASE_ANON) missing.push("SUPABASE_URL · SUPABASE_ANON");
-if (!C.GOOGLE_CLIENT_ID) missing.push("GOOGLE_CLIENT_ID");
+// GOOGLE_CLIENT_ID 점검은 뺐다 — 구글 로그인은 Supabase OAuth 로 돈다(10-15 폰 구글 로그인 성공 실측). 남겨 두면 심사자에게 「연결 안 됨」 상자가 뜬다.
 if (missing.length) {
   $('#setup').classList.remove('hide');
   $('#setup').innerHTML = '<b>아직 연결 안 된 것</b>' +
@@ -216,7 +216,7 @@ if (C.SUPABASE_URL && C.SUPABASE_ANON && !window.__nosb && window.supabase) {
   sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON);
 }
 $('#kakao').disabled = !sb;                       // 카카오는 토큰 교환에 서버가 필요하다
-$('#google').disabled = !(sb || C.GOOGLE_CLIENT_ID);
+$('#google').disabled = !sb;
 $('#emlogin').disabled = !sb; $('#emjoin').disabled = !sb;
 
 /* ★이메일 로그인. 전자결제 심사가 ★소셜이 아닌 테스트 계정을 요구해서 열었다(2026-10-14).
