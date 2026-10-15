@@ -105,17 +105,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .perk span{display:block;margin-top:5px;font-size:14px;color:var(--ink-2)}
 
 /* ── 폐쇄몰 관문. 페이지에서 딱 한 번 쓰는 어두운 면. 닫힌 문이라는 뜻을 색으로 말한다 ── */
-.vault{background:var(--ink);color:#fff}
-.vault-in{padding:88px 0;display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center}
-.vault h2{font-size:clamp(26px,2.6vw,34px);font-weight:800;letter-spacing:-.04em}
-.vault p{margin-top:14px;font-size:16px;color:rgba(255,255,255,.62);max-width:46ch}
-.vault-form{display:flex;gap:10px}
 .field{height:54px;padding:0 18px;border-radius:var(--r-field);border:1px solid rgba(255,255,255,.24);
   background:rgba(255,255,255,.06);color:#fff;font-size:16px;width:250px}
 .field::placeholder{color:rgba(255,255,255,.5)}
 .field:focus{outline:2px solid var(--accent);outline-offset:2px;border-color:transparent}
-.btn-vault{height:54px;padding:0 26px;background:#fff;color:var(--ink);font-size:16px}
-.btn-vault:hover{background:#EDEDEA}
 
 /* ── 푸터 ── */
 .foot{padding:52px 0 64px;font-size:13.5px;color:var(--ink-2)}
@@ -126,12 +119,12 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 /* ── 반응형. 768 아래는 전부 한 줄 ── */
 @media (max-width:1080px){ .deals{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:900px){
-  .hero-grid,.gong-grid,.vault-in{grid-template-columns:1fr;gap:36px}
+  .hero-grid,.gong-grid{grid-template-columns:1fr;gap:36px}
   .perks-in{grid-template-columns:1fr}
   .perk{border-left:0;border-top:1px solid var(--line);padding:20px 0}
   .perk:first-child{border-top:0}
   .nav-links{display:none}
-  .vault-form{flex-direction:column}.field{width:100%}
+  .field{width:100%}
 }
 @media (max-width:560px){
   .shell{padding:0 16px}
@@ -227,7 +220,7 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .hide{display:none}
 /* 비회원 = 로그인 전. 히어로만 보이고 나머지 구역은 로그인해야 열린다 (루비 10-14) */
 /* 비회원 = 타이머·무료딜 사진·로그인 단추만 (루비 10-14 「시간제한이랑 무료상품노출만 · 다른건 아무것도 안보이게」) */
-body.guest .perks,body.guest #goods,body.guest #vault,body.guest .nav-links,body.guest .btn-lock,body.guest #authnote,body.guest #eyebrow{display:none!important}   /* 푸터(사업자 정보)는 비회원에게도 — 전자상거래법 §10 · 토스 심사 안내 */
+body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,body.guest #authnote,body.guest #eyebrow{display:none!important}   /* 푸터(사업자 정보)는 비회원에게도 — 전자상거래법 §10 · 토스 심사 안내 */
 .slides{position:relative;aspect-ratio:832/489;background:#FFF6F7;overflow:hidden}   /* 배경 = gif 모서리 색 */
 .slides .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s;aspect-ratio:auto}
 .slides .slide.on{opacity:1}
@@ -252,10 +245,10 @@ body.guest .perks,body.guest #goods,body.guest #vault,body.guest .nav-links,body
     <nav class="nav-links">
       <a href="#top">무료딜</a>
       <a href="#goods">오늘의 딜</a>
-      <a href="#vault">회원 전용관</a>
+      <a href="#goods">회원 전용관</a>
     </nav>
     <div class="nav-right">
-      <a class="btn btn-sm btn-lock" href="#vault">
+      <a class="btn btn-sm btn-lock" href="#goods">
         <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208 80h-32V56a48 48 0 0 0-96 0v24H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16ZM96 56a32 32 0 0 1 64 0v24H96Zm112 152H48V96h160Z"/></svg>
         회원 전용관
       </a>
@@ -330,15 +323,6 @@ body.guest .perks,body.guest #goods,body.guest #vault,body.guest .nav-links,body
     <p class="disc">가격은 회원에게만 공개합니다. 표시 금액은 배송비를 포함한 총 결제 예정 금액입니다. 화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 결제는 준비 중이며 가격은 확정 전입니다.</p>
   </div>
 </section><!--/GOODS-->
-  <section class="vault" id="vault">
-    <div class="shell vault-in">
-      <div>
-        <h2>여기부터는 회원만 봅니다</h2>
-        <p>공개하지 않는 값으로 나가는 물건이 따로 있습니다. 로그인하면 값이 열립니다.</p>
-      </div>
-      <a class="btn btn-vault" href="#top">로그인하고 열기</a>
-    </div>
-  </section>
 </main>
 <footer>
   <div class="fin">
