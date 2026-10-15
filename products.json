@@ -90,6 +90,26 @@
 "reviews": 339
 },
 {
+"key": "g027",
+"brand": "옵타움",
+"name": "옵타움 핸드크림+퍼퓸 세트(로지로즈)",
+"type": "바디",
+"cat": "핸드로션+퍼퓸",
+"img": "img/goods/g027.webp",
+"price_raw": "19000",
+"reviews": 339
+},
+{
+"key": "g028",
+"brand": "옵타움",
+"name": "옵타움 핸드크림+퍼퓸 세트(센추얼리티)",
+"type": "바디",
+"cat": "핸드로션+퍼퓸",
+"img": "img/goods/g028.webp",
+"price_raw": "21000",
+"reviews": 339
+},
+{
 "key": "g033",
 "brand": "옵타움",
 "name": "옵타움 퍼퓸 바디워시 탱지서프라이즈",
@@ -120,12 +140,62 @@
 "reviews": 264
 },
 {
+"key": "g006",
+"brand": "옵타움",
+"name": "옵타움 페이퍼 인센스 단품 (48회분) 포레스트 드림",
+"type": "방향제",
+"cat": "인센스",
+"img": "img/goods/g006.webp",
+"price_raw": "12000",
+"reviews": 222
+},
+{
+"key": "g007",
+"brand": "옵타움",
+"name": "옵타움 페이퍼 인센스 단품 (48회분) 피스풀 세레나데",
+"type": "방향제",
+"cat": "인센스",
+"img": "img/goods/g007.webp",
+"price_raw": "12000",
+"reviews": 222
+},
+{
+"key": "g013",
+"brand": "옵타움",
+"name": "옵타움 핸드크림 50ml 단품 로지 로즈",
+"type": "바디",
+"cat": "핸드크림",
+"img": "img/goods/g013.webp",
+"price_raw": "9900",
+"reviews": 205
+},
+{
 "key": "g014",
 "brand": "옵타움",
 "name": "옵타움 핸드크림 50ml 단품 고져스블랙",
 "type": "바디",
 "cat": "핸드크림",
 "img": "img/goods/g014.webp",
+"price_raw": "9900",
+"reviews": 205
+},
+{
+"key": "g015",
+"brand": "옵타움",
+"name": "옵타움 핸드크림 50ml 단품 해피니스 부스터",
+"type": "바디",
+"cat": "핸드크림",
+"img": "img/goods/g015.webp",
+"price_raw": "9900",
+"reviews": 205
+},
+{
+"key": "g016",
+"brand": "옵타움",
+"name": "옵타움 핸드크림 50ml 단품 플로럴 다이브",
+"type": "바디",
+"cat": "핸드크림",
+"img": "img/goods/g016.webp",
 "price_raw": "9900",
 "reviews": 205
 },
@@ -170,26 +240,6 @@
 "reviews": null
 },
 {
-"key": "g019",
-"brand": "옵타움",
-"name": "옵타움 필로우미스트(워킹문)",
-"type": "페이셜",
-"cat": "미스트",
-"img": "img/goods/g019.webp",
-"price_raw": "16000",
-"reviews": null
-},
-{
-"key": "g022",
-"brand": "옵타움",
-"name": "옵타움 향수 50ml 단품( 시더드레스)",
-"type": "방향제",
-"cat": "향수",
-"img": "img/goods/g022.webp",
-"price_raw": "59000",
-"reviews": null
-},
-{
 "key": "g023",
 "brand": "옵타움",
 "name": "옵타움 향수 50ml 단품( 앰버 선셋)",
@@ -197,16 +247,6 @@
 "cat": "향수",
 "img": "img/goods/g023.webp",
 "price_raw": "59000",
-"reviews": null
-},
-{
-"key": "g027",
-"brand": "옵타움",
-"name": "옵타움 핸드크림+퍼퓸 세트(로지로즈)",
-"type": "바디",
-"cat": "핸드로션+퍼퓸",
-"img": "img/goods/g027.webp",
-"price_raw": "19000",
 "reviews": null
 },
 {
@@ -260,26 +300,6 @@
 "reviews": null
 },
 {
-"key": "g040",
-"brand": "옵타움",
-"name": "옵타움 바디로션 236ml 해피니스 부스터",
-"type": "바디",
-"cat": "바디로션",
-"img": "img/goods/g040.webp",
-"price_raw": "13900",
-"reviews": null
-},
-{
-"key": "g123",
-"brand": "옵타움",
-"name": "옵타움 필로우미스트100ml 슬림뮤즈",
-"type": "",
-"cat": "",
-"img": "img/goods/g123.webp",
-"price_raw": "16000",
-"reviews": null
-},
-{
 "key": "g110",
 "brand": "쿠피",
 "name": "COOPY Lifting Collagen High Ampoule(쿠피 리프팅 콜라겐 하이 앰플 30ml)",
@@ -296,6 +316,26 @@
 "type": "페이셜",
 "cat": "미스트",
 "img": "img/goods/g018.webp",
+"price_raw": "16000",
+"reviews": 108
+},
+{
+"key": "g019",
+"brand": "옵타움",
+"name": "옵타움 필로우미스트(워킹문)",
+"type": "페이셜",
+"cat": "미스트",
+"img": "img/goods/g019.webp",
+"price_raw": "16000",
+"reviews": 108
+},
+{
+"key": "g123",
+"brand": "옵타움",
+"name": "옵타움 필로우미스트100ml 슬림뮤즈",
+"type": "",
+"cat": "",
+"img": "img/goods/g123.webp",
 "price_raw": "16000",
 "reviews": 108
 },
@@ -330,16 +370,6 @@
 "reviews": 86
 },
 {
-"key": "g028",
-"brand": "옵타움",
-"name": "옵타움 핸드크림+퍼퓸 세트(센추얼리티)",
-"type": "바디",
-"cat": "핸드로션+퍼퓸",
-"img": "img/goods/g028.webp",
-"price_raw": "21000",
-"reviews": 86
-},
-{
 "key": "g024",
 "brand": "옵타움",
 "name": "옵타움 페이퍼 인센스 그리드하우스 선물세트",
@@ -368,16 +398,6 @@
 "img": "img/goods/g131.webp",
 "price_raw": "19000",
 "reviews": 66
-},
-{
-"key": "g007",
-"brand": "옵타움",
-"name": "옵타움 페이퍼 인센스 단품 (48회분) 피스풀 세레나데",
-"type": "방향제",
-"cat": "인센스",
-"img": "img/goods/g007.webp",
-"price_raw": "12000",
-"reviews": 63
 },
 {
 "key": "g058",
@@ -640,16 +660,6 @@
 "reviews": 17
 },
 {
-"key": "g015",
-"brand": "옵타움",
-"name": "옵타움 핸드크림 50ml 단품 해피니스 부스터",
-"type": "바디",
-"cat": "핸드크림",
-"img": "img/goods/g015.webp",
-"price_raw": "9900",
-"reviews": 15
-},
-{
 "key": "g008",
 "brand": "옵타움",
 "name": "옵타움 헤어 오일 에센스 55ml 단품",
@@ -668,16 +678,6 @@
 "img": "img/goods/g116.webp",
 "price_raw": "판가미정",
 "reviews": 12
-},
-{
-"key": "g016",
-"brand": "옵타움",
-"name": "옵타움 핸드크림 50ml 단품 플로럴 다이브",
-"type": "바디",
-"cat": "핸드크림",
-"img": "img/goods/g016.webp",
-"price_raw": "9900",
-"reviews": 10
 },
 {
 "key": "g124",
@@ -810,12 +810,42 @@
 "reviews": 4
 },
 {
+"key": "g021",
+"brand": "옵타움",
+"name": "옵타움 향수 50ml 단품(젠틀레인)",
+"type": "방향제",
+"cat": "향수",
+"img": "img/goods/g021.webp",
+"price_raw": "59000",
+"reviews": 4
+},
+{
+"key": "g022",
+"brand": "옵타움",
+"name": "옵타움 향수 50ml 단품( 시더드레스)",
+"type": "방향제",
+"cat": "향수",
+"img": "img/goods/g022.webp",
+"price_raw": "59000",
+"reviews": 4
+},
+{
 "key": "g039",
 "brand": "옵타움",
 "name": "옵타움 바디로션 236ml 고져스 블랙",
 "type": "바디",
 "cat": "바디로",
 "img": "img/goods/g039.webp",
+"price_raw": "13900",
+"reviews": 4
+},
+{
+"key": "g040",
+"brand": "옵타움",
+"name": "옵타움 바디로션 236ml 해피니스 부스터",
+"type": "바디",
+"cat": "바디로션",
+"img": "img/goods/g040.webp",
 "price_raw": "13900",
 "reviews": 4
 },
@@ -930,16 +960,6 @@
 "reviews": 3
 },
 {
-"key": "g006",
-"brand": "옵타움",
-"name": "옵타움 페이퍼 인센스 단품 (48회분) 포레스트 드림",
-"type": "방향제",
-"cat": "인센스",
-"img": "img/goods/g006.webp",
-"price_raw": "12000",
-"reviews": 2
-},
-{
 "key": "g106",
 "brand": "텐제로",
 "name": "텐제로 시트러스 비타민 슈가 바디 스크럽",
@@ -977,26 +997,6 @@
 "cat": "섬유향수",
 "img": "img/goods/g010.webp",
 "price_raw": "9900",
-"reviews": 1
-},
-{
-"key": "g013",
-"brand": "옵타움",
-"name": "옵타움 핸드크림 50ml 단품 로지 로즈",
-"type": "바디",
-"cat": "핸드크림",
-"img": "img/goods/g013.webp",
-"price_raw": "9900",
-"reviews": 1
-},
-{
-"key": "g021",
-"brand": "옵타움",
-"name": "옵타움 향수 50ml 단품(젠틀레인)",
-"type": "방향제",
-"cat": "향수",
-"img": "img/goods/g021.webp",
-"price_raw": "59000",
 "reviews": 1
 },
 {
