@@ -64,6 +64,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .hero-right{display:flex;flex-direction:column}
 .hero-right .gate{display:flex;flex-direction:column;flex:1;margin-top:0;max-width:none}
 .hero-right .stamps{flex:1;display:flex;flex-direction:column;margin-top:0}
+.hero-right .stamps.hide{display:none}   /* 비회원엔 스탬프 달력 숨김 — 위 규칙이 .hide 보다 세서 안 숨겨지던 결함 (10-15 모바일 재현에서 발견) */
 .hero-right .stamps .st-grid{flex:1;grid-auto-rows:1fr}
 .hero-right .st-grid .d{aspect-ratio:auto;min-height:34px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 14px;border-radius:var(--r-pill);
