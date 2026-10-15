@@ -230,7 +230,17 @@ function 이메일값(){
   if (pw.length < 6) { 이메일오류('비밀번호는 6자 이상입니다.'); return null; }
   이메일오류(''); return { email: em, password: pw };
 }
-function 이메일로그인끝(u){ myId = u.id; setWho(u.email || '로그인됨'); }
+/* 화면 두 갈래 (루비 10-15 「가입하자마자 배송지 입력하라고 하는 건 이탈 … 나중에 구매할 때 물어보고」)
+   · 기본 = 로그인 화면 : 로그인이 끝나면 홈으로 돌아간다(스탬프는 홈에서 찍힌다). 배송지는 안 묻는다.
+   · ?addr=1 = 배송지 화면 : 로그인된 사람이 홈 「무료딜 신청」·「내 정보」에서 올 때 2단계를 연다. &then=give 면 저장 뒤 홈에서 바로 신청. */
+const Q = new URLSearchParams(location.search);
+const ADDR_MODE = Q.get('addr') === '1';
+function 로그인뒤(u){
+  myId = u.id;
+  if (ADDR_MODE) { setWho(u.email || (u.user_metadata && u.user_metadata.name) || '로그인됨'); return; }
+  location.replace('/');
+}
+function 이메일로그인끝(u){ 로그인뒤(u); }
 $('#emlogin').addEventListener('click', async () => {
   const v = 이메일값(); if (!v || !sb) return;
   $('#emlogin').disabled = true;
@@ -292,10 +302,8 @@ $('#back').addEventListener('click', () => go(1));
   if (!sb) return;
   const { data } = await sb.auth.getUser();
   // ?new=1 이면 로그인돼 있어도 1단계(이메일 가입 칸)를 보여 준다 — 심사용 계정을 따로 만들 때 (2026-10-15)
-  if (data && data.user && !new URLSearchParams(location.search).has('new')) {
-    const u = data.user;
-    myId = u.id;                                   // 배송지를 이 계정에 묶는다
-    setWho(u.email || (u.user_metadata && u.user_metadata.name) || '로그인됨');
+  if (data && data.user && !Q.has('new')) {
+    로그인뒤(data.user);                            // 배송지 화면이면 2단계, 아니면 홈으로
   }
   dropProviderToken();
 })();
@@ -389,6 +397,7 @@ $('#form').addEventListener('submit', async e => {
   // ★4단계 전환: 배송지까지 입력한 사람 = 구매 의사가 가장 뚜렷한 층
   if (window.ODEAL_TRACK) window.ODEAL_TRACK.shipping();
   $('#donemsg').textContent = sb ? '배송지가 저장됐습니다.' : '화면 흐름 확인용입니다. 저장소를 연결하면 실제로 기록됩니다.';
+  if (sb && Q.get('then') === 'give') { location.replace('/?give=1'); return; }   // 홈 「무료딜 신청」에서 온 사람 = 저장 즉시 자동 신청
   go(3);
 });
 </script>

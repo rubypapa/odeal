@@ -194,6 +194,8 @@ footer div{max-width:1140px;margin:0 auto}
 /* ── 무료딜 신청 단추(히어로 카드 안 · 루비 10-15 「지금 열린 무료딜 없애고 배송지 등록하고 신청을 상단 이미지에 넣어」) ── */
 .hero-cta .gbtn{width:100%;justify-content:center;text-align:center;margin-top:14px}
 .hero-cta .gnote[hidden]{display:none}
+.hero-cta .askq{margin-top:14px;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.hero-cta .askbtns{display:flex;gap:8px;margin-top:10px}.hero-cta .askbtns .gbtn{flex:1;margin-top:0}
 .gbtn{align-self:flex-start;margin-top:16px;min-height:44px;padding:10px 20px;line-height:1.35;border:0;border-radius:11px;
   background:var(--ink);color:#fff;font:inherit;font-size:14.5px;font-weight:700;letter-spacing:-.02em;cursor:pointer}
 .gbtn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
@@ -266,6 +268,7 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
         <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208 80h-32V56a48 48 0 0 0-96 0v24H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16ZM96 56a32 32 0 0 1 64 0v24H96Zm112 152H48V96h160Z"/></svg>
         회원 전용관
       </a>
+      <a class="btn btn-sm btn-ghost hide" href="join.html?addr=1" id="navme">내 정보</a>
       <a class="btn btn-sm btn-ghost" href="join.html" id="navlogin">로그인</a>
     </div>
   </div>
@@ -391,6 +394,7 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
     $('#authnote').classList.toggle('hide', on);
     $('#signed').classList.toggle('hide', !on);
     $('#navlogin').textContent = on ? '로그아웃' : '로그인';
+    $('#navme').classList.toggle('hide', !on);   // 배송지·광고 수신 동의는 「내 정보」에서 언제든 (루비 10-15)
     document.body.classList.toggle('guest', !on);   // 비회원은 히어로(로그인)만 본다 (루비 10-14 「애초에 비회원은 볼수없게」)
     if (on) $('#navlogin').dataset.on = '1'; else delete $('#navlogin').dataset.on;
     if (!on) return;
@@ -555,12 +559,24 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
     const a = giveAction(nowR, r.body.me, r.body.threshold);
     const btn = a.act
       ? `<button class="gbtn" type="button" data-give-round="${nowR.round}">${a.label}</button>`
+      : a.ask
+        ? `<button class="gbtn" type="button" data-ask="1">${a.label}</button>`
       : a.done
         ? `<button class="gbtn ghost" type="button" disabled>${a.label}</button>`
         : `<a class="gbtn ghost" href="${a.go}">${a.label}</a>`;
     box.innerHTML = btn + `<p class="gnote"${a.note ? '' : ' hidden'}>${a.note || ''}</p>`;
     box.querySelectorAll('[data-give-round]').forEach(b =>
       b.addEventListener('click', () => onGive(+b.dataset.giveRound)));
+    box.querySelectorAll('[data-ask]').forEach(b => b.addEventListener('click', () => {
+      box.innerHTML = `<p class="askq">배송지를 입력하시겠습니까?</p><p class="gnote">무료딜을 받으려면 보낼 곳이 필요합니다. 한 번만 입력하면 다음부터는 바로 신청됩니다.</p>
+        <div class="askbtns"><a class="gbtn" href="join.html?addr=1&then=give">입력하기</a><button class="gbtn ghost" type="button" data-later="1">나중에</button></div>`;
+      box.querySelector('[data-later]').addEventListener('click', paintGive);
+    }));
+    // 배송지 화면에서 저장하고 돌아온 사람(/?give=1) = 바로 신청
+    if (new URLSearchParams(location.search).get('give') === '1') {
+      history.replaceState(null, '', '/');
+      const b = box.querySelector('[data-give-round]'); if (b) b.click();
+    }
   }
 
   // 버튼 하나가 상황마다 다른 말을 한다. 막힌 이유를 버튼에 그대로 적어야 다음 행동이 보인다.
@@ -571,7 +587,7 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
     if (x.slot === 'next' && !me.eligible)
       return { label: `담으러 가기 · ${won(me.shortfall)}원 남음`, go: 'checkout.html',
                note: `${won(threshold)}원 이상 구매하신 분부터 다음 회차 예약이 열립니다.` };
-    if (!me.hasAddress)            return { label: '배송지 등록하고 신청', go: 'join.html' };
+    if (!me.hasAddress)            return { label: '무료딜 신청하기', ask: true };   // 루비 10-15 · 누르면 그때 배송지를 물어본다(가입 직후엔 안 묻는다)
     return { label: x.slot === 'now' ? '무료딜 신청하기' : '예약하기', act: true };
   }
 
