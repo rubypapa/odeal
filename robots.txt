@@ -1,0 +1,10 @@
+# 오딜은 회원 전용 폐쇄몰 — 상품 페이지·상품 자료는 검색엔진이 긁지 않게 한다 (루비 2026-10-15)
+User-agent: *
+Disallow: /detail.html
+Disallow: /goods/
+Disallow: /products.json
+Disallow: /img/goods/
+Disallow: /join.html
+Disallow: /checkout.html
+Disallow: /pay-done.html
+Allow: /

@@ -4,7 +4,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>상품 상세 · ODEAL</title>
+<title>상품 상세 · 오딜</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
@@ -81,7 +82,7 @@ let sb = null; if (C.SUPABASE_URL && C.SUPABASE_ANON && window.supabase) sb = wi
   const [prods, idx] = await Promise.all([fetch('products.json').then(r => r.json()), fetch('goods/index.json').then(r => r.json()).catch(() => ({}))]);
   const p = prods.find(x => x.key === key); const g = idx[key] || { top: [], detail: [], text: '' };
   if (!p) { $('#none').classList.remove('hide'); return; }
-  document.title = `${p.name} · ODEAL`;
+  document.title = `${p.name} · 오딜`;
   $('#brand').textContent = p.brand; $('#name').textContent = p.name;
   const imgs = [...g.top, ...(g.top.length ? [] : (p.img ? [p.img] : []))];
   if (imgs.length) { $('#mainimg').src = imgs[0]; $('#thumbs').innerHTML = imgs.map((u, i) => `<img src="${u}" class="${i ? '' : 'on'}" alt="">`).join('');
