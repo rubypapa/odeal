@@ -184,29 +184,15 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 @media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:600px){ .grid{grid-template-columns:1fr} .goods{padding:48px 20px 60px} }
 
-/* ── 나눔 ── */
-.give{border-top:1px solid var(--line);padding:56px 24px 62px;background:var(--page)}
-.give .in{max-width:1080px;margin:0 auto}
-.give h2{font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.04em}
-.gsub{margin-top:10px;font-size:15px;color:var(--ink-2);max-width:60ch}
-.gcards{margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.gcard{border:1px solid var(--line);border-radius:14px;background:#fff;padding:20px;display:flex;gap:16px}
-.gcard.locked{background:#FBFBF9}
-.gimg{width:104px;height:140px;border-radius:10px;object-fit:cover;background:var(--page);flex:0 0 auto}
-.gbody{flex:1;display:flex;flex-direction:column;min-width:0}
-.gtag{font-size:12.5px;font-weight:800;letter-spacing:-.01em;color:var(--ink-3)}
-.gtag.now{color:var(--accent)}
-.gcard h3{margin-top:7px;font-size:17px;font-weight:800;letter-spacing:-.03em;line-height:1.35}
-.gdet{margin-top:8px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
-.gleft{margin-top:10px;font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+/* ── 무료딜 신청 단추(히어로 카드 안 · 루비 10-15 「지금 열린 무료딜 없애고 배송지 등록하고 신청을 상단 이미지에 넣어」) ── */
+.hero-cta .gbtn{width:100%;justify-content:center;text-align:center;margin-top:14px}
+.hero-cta .gnote[hidden]{display:none}
 .gbtn{align-self:flex-start;margin-top:16px;min-height:44px;padding:10px 20px;line-height:1.35;border:0;border-radius:11px;
   background:var(--ink);color:#fff;font:inherit;font-size:14.5px;font-weight:700;letter-spacing:-.02em;cursor:pointer}
 .gbtn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
 a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .gbtn:disabled{opacity:.45;cursor:not-allowed}
 .gnote{margin-top:10px;font-size:12.5px;color:var(--ink-3);line-height:1.65}
-.gfoot{margin-top:24px;font-size:13px;color:var(--ink-2)}
-@media (max-width:720px){ .gcards{grid-template-columns:1fr} .give{padding:44px 20px 50px} }
 
 /* ── 로그인 ── */
 .auth{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px;max-width:420px}
@@ -239,10 +225,9 @@ a.gbtn{display:inline-flex;align-items:center;text-decoration:none}
 .hide{display:none}
 
 .hide{display:none}
-.give{border-top:1px solid var(--line)}
 /* 비회원 = 로그인 전. 히어로만 보이고 나머지 구역은 로그인해야 열린다 (루비 10-14) */
 /* 비회원 = 타이머·무료딜 사진·로그인 단추만 (루비 10-14 「시간제한이랑 무료상품노출만 · 다른건 아무것도 안보이게」) */
-body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.guest .nav-links,body.guest .btn-lock,body.guest #authnote,body.guest #eyebrow{display:none!important}   /* 푸터(사업자 정보)는 비회원에게도 — 전자상거래법 §10 · 토스 심사 안내 */
+body.guest .perks,body.guest #goods,body.guest #vault,body.guest .nav-links,body.guest .btn-lock,body.guest #authnote,body.guest #eyebrow{display:none!important}   /* 푸터(사업자 정보)는 비회원에게도 — 전자상거래법 §10 · 토스 심사 안내 */
 .slides{position:relative;aspect-ratio:832/489;background:#FFF6F7;overflow:hidden}   /* 배경 = gif 모서리 색 */
 .slides .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s;aspect-ratio:auto}
 .slides .slide.on{opacity:1}
@@ -265,7 +250,7 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
       </svg>
     </div>
     <nav class="nav-links">
-      <a href="#give">무료딜</a>
+      <a href="#top">무료딜</a>
       <a href="#goods">오늘의 딜</a>
       <a href="#vault">회원 전용관</a>
     </nav>
@@ -306,6 +291,7 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
             <div class="bar"><span id="stockbar"></span></div>
             <div class="stock-txt"><span id="stocktxt"></span><span class="num">수량 소진 시 마감</span></div>
           </div>
+          <div class="hero-cta" id="herocta"></div>
         </figcaption>
       </figure>
       </div>
@@ -320,7 +306,7 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
           <div class="stamps hide" id="signed">
             <div class="st-head"><b id="st-title">이달의 스탬프</b><span id="st-count">-</span></div>
             <div class="st-grid" id="st-grid"></div>
-            <div class="st-foot"><span>매일 들르면 1개 · 카카오 공유 1개 · 구매하면 더</span><a class="go" href="#give">무료딜 신청</a></div>
+            <div class="st-foot"><span>매일 들르면 1개 · 카카오 공유 1개 · 구매하면 더</span><a class="go" href="#top">무료딜 신청</a></div>
           </div>
         </div>
       </div>
@@ -335,15 +321,7 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
       <div class="perk"><strong>다음 무료상품은 ?</strong><span>스탬프를 모은 사람에게 먼저 열립니다. 무엇인지는 열리는 날 공개합니다.</span></div>
     </div>
   </section>
-<!--GIVE-->
-<section class="give hide" id="give">
-  <div class="in">
-    <h2>지금 열린 무료딜</h2>
-    <p class="gsub">한 회차에 한 품목씩 무료딜로 엽니다. 다음 회차는 미리 예약해 두면 열릴 때 먼저 신청됩니다.</p>
-    <div class="gcards" id="gcards"></div>
-    <p class="gfoot">밖에서 사는 값과 비교해 보고 담아보세요. 유통 단계를 하나 건너뛴 값입니다.</p>
-  </div>
-</section><!--/GIVE--><!--GOODS-->
+<!--GOODS-->
 <section class="goods" id="goods">
   <div class="in">
     <h2>오늘의 딜</h2>
@@ -563,7 +541,6 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
   // ── 나눔 두 칸 ──────────────────────────────────────────
   // ★자격 판정(누적 결제 3만원)은 여기서 하지 않는다. 여기서 하면 개발자도구로 뒤집힌다.
   //   서버(functions/v1/giveaway)가 원장을 읽어 판정하고, 이 코드는 그 결과를 그리기만 한다.
-  const GIVE = { now: '지금 무료딜', next: '다음 무료딜 예약' };
   let giveState = null;
 
   async function askGive(action, round) {
@@ -577,25 +554,28 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
   }
 
   async function paintGive() {
-    const sec = $('#give');
-    if (!sec) return;
+    const box = $('#herocta');
+    if (!box) return;
     let r;
-    try { r = await askGive('status'); } catch (_) { return; }   // 못 부르면 섹션을 숨긴 채로 둔다
+    try { r = await askGive('status'); } catch (_) { return; }   // 못 부르면 단추 없이 둔다
     if (!r.ok || !r.body || !Array.isArray(r.body.rounds) || !r.body.rounds.length) return;
     giveState = r.body;
-    sec.classList.remove('hide');
     const nowR = r.body.rounds.find(x => x.slot === 'now');
-    if (nowR) {
-      // 수량 표시는 개수 없이 퍼센트 수치만 (루비 10-14 「20000개 준비 0개 나감 이렇게 하지말고 83% 이렇게 채워놔 수치만」)
-      const FILL = 83;
-      $('#stockbar').style.width = FILL + '%';
-      $('#stocktxt').textContent = FILL + '%';
-      $('#stock').classList.remove('hide');
-    }
-    $('#gcards').innerHTML = r.body.rounds
-      .sort((a, b) => (a.slot === 'now' ? 0 : 1) - (b.slot === 'now' ? 0 : 1))
-      .map(x => cardHTML(x, r.body.me, r.body.threshold)).join('');
-    $('#gcards').querySelectorAll('[data-give-round]').forEach(b =>
+    if (!nowR) return;
+    // 수량 표시는 개수 없이 퍼센트 수치만 (루비 10-14 「20000개 준비 0개 나감 이렇게 하지말고 83% 이렇게 채워놔 수치만」)
+    const FILL = 83;
+    $('#stockbar').style.width = FILL + '%';
+    $('#stocktxt').textContent = FILL + '%';
+    $('#stock').classList.remove('hide');
+    // 신청 단추는 히어로 카드 안에 (루비 10-15 「지금 열린 무료딜 없애고 배송지 등록하고 신청을 상단 이미지에 넣어」)
+    const a = giveAction(nowR, r.body.me, r.body.threshold);
+    const btn = a.act
+      ? `<button class="gbtn" type="button" data-give-round="${nowR.round}">${a.label}</button>`
+      : a.done
+        ? `<button class="gbtn ghost" type="button" disabled>${a.label}</button>`
+        : `<a class="gbtn ghost" href="${a.go}">${a.label}</a>`;
+    box.innerHTML = btn + `<p class="gnote"${a.note ? '' : ' hidden'}>${a.note || ''}</p>`;
+    box.querySelectorAll('[data-give-round]').forEach(b =>
       b.addEventListener('click', () => onGive(+b.dataset.giveRound)));
   }
 
@@ -611,25 +591,6 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
     return { label: x.slot === 'now' ? '무료딜 신청하기' : '예약하기', act: true };
   }
 
-  function cardHTML(x, me, threshold) {
-    const a = giveAction(x, me, threshold);
-    const img = x.image ? `<img class="gimg" src="img/${x.image}" alt="" width="104" height="140" loading="lazy">` : '';
-    const btn = a.act
-      ? `<button class="gbtn" type="button" data-give-round="${x.round}">${a.label}</button>`
-      : a.done
-        ? `<button class="gbtn ghost" type="button" disabled>${a.label}</button>`
-        : `<a class="gbtn ghost" href="${a.go}">${a.label}</a>`;
-    return `<article class="gcard${x.slot === 'next' ? ' locked' : ''}">${img}
-      <div class="gbody">
-        <p class="gtag ${x.slot}">${GIVE[x.slot]} · ${x.round}회차</p>
-        <h3>${esc(x.title)}</h3>
-        ${x.detail ? `<p class="gdet">${esc(x.detail)}</p>` : ''}
-        <p class="gleft">남은 수량 ${won(x.left)}개</p>
-        ${btn}
-        ${a.note ? `<p class="gnote">${a.note}</p>` : ''}
-      </div></article>`;
-  }
-  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   async function onGive(round) {
     const btn = $(`[data-give-round="${round}"]`);
@@ -649,9 +610,8 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
       closed: '마감된 회차입니다.', not_eligible: '아직 예약 자격이 아닙니다.',
     }[r.body && r.body.reason] || '신청하지 못했습니다.';
     await paintGive();
-    const card = btn && btn.closest('.gcard');
-    const note = card && card.querySelector('.gnote');
-    if (note) note.textContent = why;
+    const note = $('#herocta .gnote');
+    if (note) { note.textContent = why; note.hidden = false; }
   }
 
   sb.auth.getSession().then(({ data }) => {
