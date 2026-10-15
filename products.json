@@ -1,5 +1,15 @@
 [
 {
+"key": "g012",
+"brand": "옵타움",
+"name": "옵타움 섬유향수 8ml 단품 해피니스 부스터",
+"type": "방향제",
+"cat": "섬유향수",
+"img": "img/goods/g012.webp",
+"price_raw": "9900",
+"reviews": 5000
+},
+{
 "key": "g038",
 "brand": "옵타움",
 "name": "옵타움 라이프 퍼퓸 250ml",
@@ -7,6 +17,16 @@
 "cat": "퍼퓸",
 "img": "img/goods/g038.webp",
 "price_raw": "",
+"reviews": 5000
+},
+{
+"key": "g122",
+"brand": "옵타움",
+"name": "옵타움 해피니스 부스터 사쉐",
+"type": "",
+"cat": "",
+"img": "img/goods/g122.webp",
+"price_raw": "19000",
 "reviews": 5000
 },
 {
@@ -28,16 +48,6 @@
 "img": "img/goods/g118.webp",
 "price_raw": "판가미정",
 "reviews": 846
-},
-{
-"key": "g111",
-"brand": "쿠피",
-"name": "COOPY Melasma Clear Cream(멜라스마 클리어 크림)",
-"type": "",
-"cat": "",
-"img": "img/goods/g111.webp",
-"price_raw": "19000",
-"reviews": 560
 },
 {
 "key": "g112",
@@ -80,6 +90,16 @@
 "reviews": 348
 },
 {
+"key": "g017",
+"brand": "옵타움",
+"name": "옵타움 핸드크림 50ml 단품 센슈얼리티",
+"type": "바디",
+"cat": "핸드크림",
+"img": "img/goods/g017.webp",
+"price_raw": "9900",
+"reviews": 339
+},
+{
 "key": "g025",
 "brand": "옵타움",
 "name": "옵타움 핸드크림+퍼퓸 세트(프로럴다이브)",
@@ -118,6 +138,66 @@
 "img": "img/goods/g033.webp",
 "price_raw": "14900",
 "reviews": 316
+},
+{
+"key": "g023",
+"brand": "옵타움",
+"name": "옵타움 향수 50ml 단품( 앰버 선셋)",
+"type": "방향제",
+"cat": "향수",
+"img": "img/goods/g023.webp",
+"price_raw": "59000",
+"reviews": null
+},
+{
+"key": "g029",
+"brand": "옵타움",
+"name": "옵타움 디퓨저 100ml (+리드스틱 5ea) 로지로즈",
+"type": "방향제",
+"cat": "디퓨저",
+"img": "img/goods/g029.webp",
+"price_raw": "19000",
+"reviews": null
+},
+{
+"key": "g030",
+"brand": "옵타움",
+"name": "옵타움 디퓨저 100ml (+리드스틱 5ea) 플로럴 다이브",
+"type": "방향제",
+"cat": "디퓨저",
+"img": "img/goods/g030.webp",
+"price_raw": "19000",
+"reviews": null
+},
+{
+"key": "g035",
+"brand": "옵타움",
+"name": "옵타움 퍼퓸 트리트먼트 루시드나잇",
+"type": "헤어",
+"cat": "트린트먼트",
+"img": "img/goods/g035.webp",
+"price_raw": "14900",
+"reviews": null
+},
+{
+"key": "g036",
+"brand": "옵타움",
+"name": "옵타움 필로우디퓨져 워킹문",
+"type": "방향제",
+"cat": "디퓨저",
+"img": "img/goods/g036.webp",
+"price_raw": "23900",
+"reviews": null
+},
+{
+"key": "g037",
+"brand": "옵타움",
+"name": "옵타움 필로우디퓨져 유니버스드림",
+"type": "방향제",
+"cat": "디퓨저",
+"img": "img/goods/g037.webp",
+"price_raw": "23900",
+"reviews": null
 },
 {
 "key": "g005",
@@ -200,6 +280,16 @@
 "reviews": 205
 },
 {
+"key": "g032",
+"brand": "옵타움",
+"name": "옵타움 퍼퓸 디스커버리 세트",
+"type": "바디",
+"cat": "향수",
+"img": "img/goods/g032.webp",
+"price_raw": "29000",
+"reviews": 205
+},
+{
 "key": "g004",
 "brand": "파머시안",
 "name": "NMN 30,000",
@@ -228,76 +318,6 @@
 "img": "img/goods/g061.webp",
 "price_raw": "2900",
 "reviews": 143
-},
-{
-"key": "g017",
-"brand": "옵타움",
-"name": "옵타움 핸드크림 50ml 단품 센슈얼리티",
-"type": "바디",
-"cat": "핸드크림",
-"img": "img/goods/g017.webp",
-"price_raw": "9900",
-"reviews": null
-},
-{
-"key": "g023",
-"brand": "옵타움",
-"name": "옵타움 향수 50ml 단품( 앰버 선셋)",
-"type": "방향제",
-"cat": "향수",
-"img": "img/goods/g023.webp",
-"price_raw": "59000",
-"reviews": null
-},
-{
-"key": "g029",
-"brand": "옵타움",
-"name": "옵타움 디퓨저 100ml (+리드스틱 5ea) 로지로즈",
-"type": "방향제",
-"cat": "디퓨저",
-"img": "img/goods/g029.webp",
-"price_raw": "19000",
-"reviews": null
-},
-{
-"key": "g030",
-"brand": "옵타움",
-"name": "옵타움 디퓨저 100ml (+리드스틱 5ea) 플로럴 다이브",
-"type": "방향제",
-"cat": "디퓨저",
-"img": "img/goods/g030.webp",
-"price_raw": "19000",
-"reviews": null
-},
-{
-"key": "g035",
-"brand": "옵타움",
-"name": "옵타움 퍼퓸 트리트먼트 루시드나잇",
-"type": "헤어",
-"cat": "트린트먼트",
-"img": "img/goods/g035.webp",
-"price_raw": "14900",
-"reviews": null
-},
-{
-"key": "g036",
-"brand": "옵타움",
-"name": "옵타움 필로우디퓨져 워킹문",
-"type": "방향제",
-"cat": "디퓨저",
-"img": "img/goods/g036.webp",
-"price_raw": "23900",
-"reviews": null
-},
-{
-"key": "g037",
-"brand": "옵타움",
-"name": "옵타움 필로우디퓨져 유니버스드림",
-"type": "방향제",
-"cat": "디퓨저",
-"img": "img/goods/g037.webp",
-"price_raw": "23900",
-"reviews": null
 },
 {
 "key": "g110",
@@ -640,16 +660,6 @@
 "reviews": null
 },
 {
-"key": "g012",
-"brand": "옵타움",
-"name": "옵타움 섬유향수 8ml 단품 해피니스 부스터",
-"type": "방향제",
-"cat": "섬유향수",
-"img": "img/goods/g012.webp",
-"price_raw": "9900",
-"reviews": 18
-},
-{
 "key": "g081",
 "brand": "아렌시아",
 "name": "아렌시아 블랙 티 라이스모찌 클렌저 120g",
@@ -728,16 +738,6 @@
 "img": "img/goods/g126.webp",
 "price_raw": "6900",
 "reviews": 7
-},
-{
-"key": "g032",
-"brand": "옵타움",
-"name": "옵타움 퍼퓸 디스커버리 세트",
-"type": "바디",
-"cat": "향수",
-"img": "img/goods/g032.webp",
-"price_raw": "29000",
-"reviews": 6
 },
 {
 "key": "g054",
@@ -950,6 +950,16 @@
 "reviews": 3
 },
 {
+"key": "g111",
+"brand": "쿠피",
+"name": "COOPY Melasma Clear Cream(멜라스마 클리어 크림)",
+"type": "",
+"cat": "",
+"img": "img/goods/g111.webp",
+"price_raw": "19000",
+"reviews": 3
+},
+{
 "key": "g113",
 "brand": "닥터윅",
 "name": "딥 콜라겐 마스크팩(4ea)",
@@ -1067,16 +1077,6 @@
 "cat": "",
 "img": "img/goods/g099.webp",
 "price_raw": "9900",
-"reviews": 1
-},
-{
-"key": "g122",
-"brand": "옵타움",
-"name": "옵타움 해피니스 부스터 사쉐",
-"type": "",
-"cat": "",
-"img": "img/goods/g122.webp",
-"price_raw": "19000",
 "reviews": 1
 },
 {
