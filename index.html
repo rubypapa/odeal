@@ -144,11 +144,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .goods{border-top:1px solid var(--line);padding:64px 24px 76px;background:var(--page)}   /* 배경 = 전 「지금 열린 무료딜」 섹션 색(루비 10-15) */
 /* 폭 = 위 히어로(.shell 1240 − 좌우 24px) · 카드 3장 바깥 세로선을 사진 카드 왼쪽 선·달력 오른쪽 선에 맞춘다 (루비 10-15 「중앙정렬이 아니라 세로선 맞추라고」) */
 .goods .in{max-width:calc(var(--shell) - 48px);margin:0 auto}
-.goods .in > .grid{margin-top:16px}   /* 제목 바로 아래로 올림 (루비 10-15 「이미지를 올려」) */
+.goods .in > .grid{margin-top:0}   /* 제목 바로 아래로 올림 (루비 10-15 「이미지를 올려」) */
 .goods h2{font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.04em}
 .grid{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .card{border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;background:#fff}
 .thumb{display:block;background:var(--page);aspect-ratio:1/1;overflow:hidden}
+.thumb{position:relative}
+.tag-deal{position:absolute;top:12px;left:12px;height:30px;padding:0 13px;border-radius:var(--r-pill);background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:-.02em;display:inline-flex;align-items:center;z-index:1}   /* 사진 위 꼬리표 — 제목 대신 (루비 10-15 「오늘의딜 빼고 그냥 이미지에다가 오늘의딜상품 적고」) */
 .gmore{margin-top:22px;text-align:center}.gmore .btn{border:1px solid var(--line-2);padding:0 26px;height:46px}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1}
@@ -319,7 +321,6 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
 <!--GOODS-->
 <section class="goods" id="goods">
   <div class="in">
-    <h2>오늘의 딜</h2>
     <div class="grid" id="goodsgrid"></div>
     <p class="gmore hide" id="gmore"><button class="btn" type="button" id="gmorebtn">더 보기</button></p>
     <p class="disc">가격은 회원에게만 공개합니다. 표시 금액은 배송비를 포함한 총 결제 예정 금액입니다. 화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 결제는 준비 중이며 가격은 확정 전입니다.</p>
@@ -431,7 +432,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
   function goodsCard(x) {
     const img = x.img ? `<img src="${x.img}" alt="${x.name}" loading="lazy" width="700" height="700">` : '';
     const tag = x.price_raw && /1\+1/.test(x.price_raw) ? '<span class="eyeb">1+1</span>' : `<span class="eyeb">${x.brand}</span>`;
-    return `<article class="card" data-key="${x.key}"><a class="thumb" href="detail.html?k=${x.key}">${img}</a><div class="body">${tag}<h3><a href="detail.html?k=${x.key}">${x.name}</a></h3>
+    return `<article class="card" data-key="${x.key}"><a class="thumb" href="detail.html?k=${x.key}"><span class="tag-deal">오늘의 딜 상품</span>${img}</a><div class="body">${tag}<h3><a href="detail.html?k=${x.key}">${x.name}</a></h3>
       <div class="price" data-price-key="${x.key}"><span class="locked">회원 전용가</span></div>
       <p class="ship" data-ship-key="${x.key}">로그인하면 가격이 보입니다</p></div></article>`;
   }
