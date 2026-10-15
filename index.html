@@ -156,11 +156,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1}
 .eyeb{font-size:12.5px;font-weight:800;color:var(--accent);letter-spacing:-.01em}
 .card h3{margin-top:7px;font-size:16.5px;font-weight:700;letter-spacing:-.025em;line-height:1.4}
+.card h3{display:flex;justify-content:space-between;align-items:center;gap:8px}   /* 「회원 전용가」 라벨은 상품명 오른쪽 끝 (루비 10-15) */
+.card h3 .locked{flex:none;font-size:12.5px}
 .vol{display:inline-block;margin-left:7px;font-size:13px;font-weight:600;color:var(--ink-3)}
 .ing{margin-top:9px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
 .price{margin-top:16px;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}
-.price .locked+b{margin-left:8px}
-.price .locked+.rate,.price .locked+b{margin-left:8px}
 .price .rate{font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-.02em}
 .price .was{font-size:13.5px;font-weight:400;color:var(--ink-3);text-decoration:line-through}
 .price b{font-size:24px;font-weight:800;letter-spacing:-.03em}
@@ -435,8 +435,8 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
   function goodsCard(x) {
     const img = x.img ? `<img src="${x.img}" alt="${x.name}" loading="lazy" width="700" height="700">` : '';
     const tag = x.price_raw && /1\+1/.test(x.price_raw) ? '<span class="eyeb">1+1</span>' : `<span class="eyeb">${x.brand}</span>`;
-    return `<article class="card" data-key="${x.key}"><a class="thumb" href="detail.html?k=${x.key}"><span class="tag-deal">오늘의 딜 상품</span>${img}</a><div class="body">${tag}<h3><a href="detail.html?k=${x.key}">${x.name}</a></h3>
-      <div class="price" data-price-key="${x.key}"><span class="locked">회원 전용가</span></div>
+    return `<article class="card" data-key="${x.key}"><a class="thumb" href="detail.html?k=${x.key}"><span class="tag-deal">오늘의 딜 상품</span>${img}</a><div class="body">${tag}<h3><a href="detail.html?k=${x.key}">${x.name}</a><span class="locked">회원 전용가</span></h3>
+      <div class="price" data-price-key="${x.key}"></div>
       <p class="ship" data-ship-key="${x.key}">로그인하면 가격이 보입니다</p></div></article>`;
   }
   function goodsMore() {
@@ -452,7 +452,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
   async function paintPrice(on) {
     const slots = document.querySelectorAll('[data-price-key]');
     if (!on) {
-      slots.forEach(el => { el.innerHTML = '<span class="locked">회원 전용가</span>'; });
+      slots.forEach(el => { el.innerHTML = ''; });
       document.querySelectorAll('[data-ship-key]').forEach(el => { el.textContent = '로그인하면 가격이 보입니다'; });
       return;
     }
@@ -466,7 +466,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
       // 라벨 「회원 전용가」는 그대로 두고 가격만 옆에 붙인다 (루비 10-15)
       // 컬리 꼴 = 할인율 · 정가 취소선 · 판매가 (루비 10-15 「컬리처럼 … 우리는 오딜 색으로 통일」) — 정가(list_price)가 있을 때만 할인율·취소선
       const off = r.list_price > r.price ? `<b class="rate">${Math.round((r.list_price - r.price) / r.list_price * 100)}%</b><s class="was">${won(r.list_price)}원</s>` : '';
-      el.innerHTML = `<span class="locked">회원 전용가</span>${off}<b class="num">${won(r.price)}</b><span>원</span>${tag}`;
+      el.innerHTML = `${off}<b class="num">${won(r.price)}</b><span>원</span>${tag}`;
     });
     document.querySelectorAll('[data-ship-key]').forEach(el => {
       const r = m[el.dataset.shipKey];
