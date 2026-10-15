@@ -96,7 +96,7 @@ let sb = null; if (C.SUPABASE_URL && C.SUPABASE_ANON && window.supabase) sb = wi
   }
   const { data: rows } = await sb.from('product_price').select('key,price,ship').eq('key', key);
   const r = rows && rows[0];
-  if (r) { $('#price').innerHTML = `<b>${won(r.price + r.ship)}</b><span>원</span>`; $('#ship').textContent = `상품 ${won(r.price)}원 + 배송비 ${won(r.ship)}원`; }
+  if (r) { $('#price').innerHTML = `<span class="locked">회원 전용가</span><b style="margin-left:10px">${won(r.price + r.ship)}</b><span>원</span>`; $('#ship').textContent = `상품 ${won(r.price)}원 + 배송비 ${won(r.ship)}원`; }
   else { $('#price').innerHTML = '<span class="locked">가격 준비 중</span>'; }
 })();
 </script>

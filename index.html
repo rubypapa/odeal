@@ -163,6 +163,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .vol{display:inline-block;margin-left:7px;font-size:13px;font-weight:600;color:var(--ink-3)}
 .ing{margin-top:9px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
 .price{margin-top:16px;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}
+.price .locked+b{margin-left:8px}
 .price b{font-size:24px;font-weight:800;letter-spacing:-.03em}
 .price span{font-size:15px;font-weight:700}
 .num{font-variant-numeric:tabular-nums}
@@ -494,7 +495,8 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
       const r = m[el.dataset.priceKey];
       if (!r) return;
       const tag = r.note && r.note !== '확정' ? '<span class="pending">가격 확정 전</span>' : '';
-      el.innerHTML = `<b class="num">${won(r.price + r.ship)}</b><span>원</span>${tag}`;
+      // 라벨 「회원 전용가」는 그대로 두고 가격만 옆에 붙인다 (루비 10-15)
+      el.innerHTML = `<span class="locked">회원 전용가</span><b class="num">${won(r.price + r.ship)}</b><span>원</span>${tag}`;
     });
     document.querySelectorAll('[data-ship-key]').forEach(el => {
       const r = m[el.dataset.shipKey];
