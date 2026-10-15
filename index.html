@@ -160,6 +160,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .ing{margin-top:9px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
 .price{margin-top:16px;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}
 .price .locked+b{margin-left:8px}
+.price .locked+.rate,.price .locked+b{margin-left:8px}
+.price .rate{font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-.02em}
+.price .was{font-size:13.5px;font-weight:400;color:var(--ink-3);text-decoration:line-through}
 .price b{font-size:24px;font-weight:800;letter-spacing:-.03em}
 .price span{font-size:15px;font-weight:700}
 .num{font-variant-numeric:tabular-nums}
@@ -323,7 +326,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
   <div class="in">
     <div class="grid" id="goodsgrid"></div>
     <p class="gmore hide" id="gmore"><button class="btn" type="button" id="gmorebtn">더 보기</button></p>
-    <p class="disc">가격은 회원에게만 공개합니다. 표시 금액은 배송비를 포함한 총 결제 예정 금액입니다. 화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 결제는 준비 중이며 가격은 확정 전입니다.</p>
+    <p class="disc">가격은 회원에게만 공개합니다. 표시 금액은 상품 가격이고 배송비는 아래 줄에 따로 적습니다. 화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 결제는 준비 중이며 가격은 확정 전입니다.</p>
   </div>
 </section><!--/GOODS-->
 </main>
@@ -453,7 +456,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
       document.querySelectorAll('[data-ship-key]').forEach(el => { el.textContent = '로그인하면 가격이 보입니다'; });
       return;
     }
-    const { data, error } = await sb.from('product_price').select('key,price,ship,note');
+    const { data, error } = await sb.from('product_price').select('key,price,ship,note,list_price');
     if (error || !data) return;                       // 못 읽으면 잠긴 상태 그대로 둔다
     const m = Object.fromEntries(data.map(r => [r.key, r]));
     slots.forEach(el => {
@@ -461,11 +464,13 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
       if (!r) return;
       const tag = r.note && r.note !== '확정' ? '<span class="pending">가격 확정 전</span>' : '';
       // 라벨 「회원 전용가」는 그대로 두고 가격만 옆에 붙인다 (루비 10-15)
-      el.innerHTML = `<span class="locked">회원 전용가</span><b class="num">${won(r.price + r.ship)}</b><span>원</span>${tag}`;
+      // 컬리 꼴 = 할인율 · 정가 취소선 · 판매가 (루비 10-15 「컬리처럼 … 우리는 오딜 색으로 통일」) — 정가(list_price)가 있을 때만 할인율·취소선
+      const off = r.list_price > r.price ? `<b class="rate">${Math.round((r.list_price - r.price) / r.list_price * 100)}%</b><s class="was">${won(r.list_price)}원</s>` : '';
+      el.innerHTML = `<span class="locked">회원 전용가</span>${off}<b class="num">${won(r.price)}</b><span>원</span>${tag}`;
     });
     document.querySelectorAll('[data-ship-key]').forEach(el => {
       const r = m[el.dataset.shipKey];
-      if (r) el.textContent = `상품 ${won(r.price)}원 + 배송비 ${won(r.ship)}원 · 오픈 시 결제 가능`;
+      if (r) el.textContent = `배송비 ${won(r.ship)}원 · 총 ${won(r.price + r.ship)}원 · 오픈 시 결제 가능`;
     });
   }
   // 우리는 카카오·구글의 액세스 토큰을 쓰지 않는다. 브라우저에 남겨둘 이유가 없으므로 지운다.

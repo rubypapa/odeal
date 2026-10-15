@@ -94,9 +94,13 @@ let sb = null; if (C.SUPABASE_URL && C.SUPABASE_ANON && window.supabase) sb = wi
     $('#src').textContent = g.source ? '출처 · ' + g.source : '';
     $('#detail').classList.remove('hide');
   }
-  const { data: rows } = await sb.from('product_price').select('key,price,ship').eq('key', key);
+  const { data: rows } = await sb.from('product_price').select('key,price,ship,list_price').eq('key', key);
   const r = rows && rows[0];
-  if (r) { $('#price').innerHTML = `<span class="locked">회원 전용가</span><b style="margin-left:10px">${won(r.price + r.ship)}</b><span>원</span>`; $('#ship').textContent = `상품 ${won(r.price)}원 + 배송비 ${won(r.ship)}원`; }
+  if (r) {
+    const off = r.list_price > r.price ? `<b style="margin-left:10px;font-size:18px;color:var(--accent)">${Math.round((r.list_price - r.price) / r.list_price * 100)}%</b><s style="margin-left:6px;font-size:13.5px;font-weight:400;color:var(--ink-3)">${won(r.list_price)}원</s>` : '';
+    $('#price').innerHTML = `<span class="locked">회원 전용가</span>${off}<b style="margin-left:10px">${won(r.price)}</b><span>원</span>`;
+    $('#ship').textContent = `배송비 ${won(r.ship)}원 · 총 ${won(r.price + r.ship)}원`;
+  }
   else { $('#price').innerHTML = '<span class="locked">가격 준비 중</span>'; }
 })();
 </script>
