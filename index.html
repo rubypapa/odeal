@@ -167,6 +167,7 @@ footer div{max-width:1140px;margin:0 auto}
 .price{margin-top:16px;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}
 .price .rate{font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-.02em}
 .price .was{font-size:13.5px;font-weight:400;color:var(--ink-3);text-decoration:line-through}
+.price .was .wl{text-decoration:none;display:inline-block;margin-right:2px}   /* 「정가」 글자는 취소선 없이 (루비 10-15 「가격앞에 정가라고 다른 상품도」) */
 .price b{font-size:24px;font-weight:800;letter-spacing:-.03em}
 .price span{font-size:15px;font-weight:700}
 .num{font-variant-numeric:tabular-nums}
@@ -467,7 +468,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
       const tag = r.note && r.note !== '확정' ? '<span class="pending">가격 확정 전</span>' : '';
       // 라벨 「회원 전용가」는 그대로 두고 가격만 옆에 붙인다 (루비 10-15)
       // 컬리 꼴 = 할인율 · 정가 취소선 · 판매가 (루비 10-15 「컬리처럼 … 우리는 오딜 색으로 통일」) — 정가(list_price)가 있을 때만 할인율·취소선
-      const off = r.list_price > r.price ? `<b class="rate">${Math.round((r.list_price - r.price) / r.list_price * 100)}%</b><s class="was">${won(r.list_price)}원</s>` : '';
+      const off = r.list_price > r.price ? `<b class="rate">${Math.round((r.list_price - r.price) / r.list_price * 100)}%</b><s class="was"><span class="wl">정가</span> ${won(r.list_price)}원</s>` : '';
       el.innerHTML = `${off}<b class="num">${won(r.price)}</b><span>원</span>${tag}`;
     });
     document.querySelectorAll('[data-ship-key]').forEach(el => {
