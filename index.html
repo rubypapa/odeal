@@ -447,7 +447,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
     paintPrice(!!lastUser);
   }
   $('#gmorebtn').addEventListener('click', goodsMore);
-  fetch('products.json').then(r => r.json()).then(j => { GOODS = GOODS_SHOW ? j.filter(x => GOODS_SHOW.includes(x.key)) : j; goodsMore(); }).catch(e => console.warn('products.json', e));
+  fetch('products.json', { cache: 'no-cache' }).then(r => r.json()).then(j => { GOODS = GOODS_SHOW ? j.filter(x => GOODS_SHOW.includes(x.key)) : j; goodsMore(); }).catch(e => console.warn('products.json', e));
   let lastUser = null;
   async function paintPrice(on) {
     const slots = document.querySelectorAll('[data-price-key]');
