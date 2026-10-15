@@ -120,7 +120,7 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
     <!-- ★이메일 로그인. 소셜만 두면 전자결제 심사에서 테스트 계정을 낼 수 없다
          (토스 신청서 「회원 전용 쇼핑몰」= 테스트 계정 ID·비밀번호 필수 · 2026-10-14). 비밀번호는 Supabase 인증이
          해시로 보관하며 우리 서버·이 코드에는 남지 않는다. 기본으로 펼쳐 둔다 — 접혀 있으면 심사자가 못 찾는다. -->
-    <details class="emailgate" id="emailgate" open id="emailbox">
+    <details class="emailgate" id="emailgate" open>
       <summary>이메일로 로그인</summary>
       <div class="ef">
         <input class="in" id="em" type="email" autocomplete="email" placeholder="이메일" spellcheck="false">
@@ -222,7 +222,7 @@ $('#emlogin').disabled = !sb; $('#emjoin').disabled = !sb;
 /* ★이메일 로그인. 전자결제 심사가 ★소셜이 아닌 테스트 계정을 요구해서 열었다(2026-10-14).
    비밀번호는 Supabase 인증으로 바로 가고 우리 서버·이 코드에는 남지 않는다. */
 // 홈 고르기 창 「이메일로 로그인」(join.html?email=1)으로 오면 접힘을 펼치고 이메일 칸에 커서 (10-15 · 토스 심사 테스트 계정 진입)
-if (new URLSearchParams(location.search).get('email') === '1') { const d = document.getElementById('emailbox'); if (d) { d.open = true; setTimeout(() => { const em = document.getElementById('em'); if (em) em.focus(); d.scrollIntoView({ block: 'center' }); }, 50); } }
+if (new URLSearchParams(location.search).get('email') === '1') { const d = document.getElementById('emailgate'); if (d) { d.open = true; setTimeout(() => { const em = document.getElementById('em'); if (em) em.focus(); d.scrollIntoView({ block: 'center' }); }, 50); } }
 function 이메일오류(m){ const e = $('#e-em'); e.textContent = m; e.style.display = m ? 'block' : 'none'; }
 function 이메일값(){
   const em = $('#em').value.trim(), pw = $('#pw').value;
