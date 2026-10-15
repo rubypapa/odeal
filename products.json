@@ -215,7 +215,7 @@
 "name": "멜라레스 100,000",
 "type": "페이셜",
 "cat": "크림",
-"img": "img/goods/g003.webp?v=7e9d664b",
+"img": "img/goods/g003.webp?v=965502be",
 "price_raw": "1+1 29800",
 "reviews": 264
 },
@@ -308,6 +308,16 @@
 "img": "img/goods/g067.webp?v=59dbcda5",
 "price_raw": "18000",
 "reviews": 164
+},
+{
+"key": "g111",
+"brand": "쿠피",
+"name": "COOPY Melasma Clear Cream(멜라스마 클리어 크림)",
+"type": "",
+"cat": "",
+"img": "img/goods/g111.webp?v=371a6e34",
+"price_raw": "19000",
+"reviews": null
 },
 {
 "key": "g061",
@@ -485,7 +495,7 @@
 "name": "옵시디앙 프로페셔널 실키 플라워 세럼",
 "type": "페이셜",
 "cat": "세럼",
-"img": "img/goods/g071.webp?v=b416aa7b",
+"img": "img/goods/g071.webp?v=fa56b775",
 "price_raw": "15000",
 "reviews": 38
 },
@@ -950,16 +960,6 @@
 "reviews": 3
 },
 {
-"key": "g111",
-"brand": "쿠피",
-"name": "COOPY Melasma Clear Cream(멜라스마 클리어 크림)",
-"type": "",
-"cat": "",
-"img": "img/goods/g111.webp?v=08e6a6d2",
-"price_raw": "19000",
-"reviews": 3
-},
-{
 "key": "g113",
 "brand": "닥터윅",
 "name": "딥 콜라겐 마스크팩(4ea)",
@@ -1245,7 +1245,7 @@
 "name": "PGA선몬랩피토워터선스프레이150ML",
 "type": "",
 "cat": "",
-"img": "img/goods/g101.webp?v=08437836",
+"img": "img/goods/g101.webp?v=fbf76244",
 "price_raw": "8900",
 "reviews": null
 },
