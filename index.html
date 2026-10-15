@@ -151,7 +151,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .goods{border-top:1px solid var(--line);padding:64px 24px 76px;background:#fff}
 .goods .in{max-width:1080px;margin:0 auto}
 .goods h2{font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.04em}
-.ghead{margin-top:10px;font-size:15px;color:var(--ink-2);max-width:60ch}
 .grid{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .card{border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;background:#fff}
 .thumb{display:block;background:var(--page);aspect-ratio:1/1;overflow:hidden}
@@ -348,7 +347,6 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
 <section class="goods" id="goods">
   <div class="in">
     <h2>오늘의 딜</h2>
-    <p class="ghead">주식회사 와이엘트레이딩이 공급하는 상품입니다. 가격은 회원에게만 열립니다.</p>
     <div class="grid" id="goodsgrid"></div>
     <p class="gmore hide" id="gmore"><button class="btn" type="button" id="gmorebtn">더 보기</button></p>
     <p class="disc">가격은 회원에게만 공개합니다. 표시 금액은 배송비를 포함한 총 결제 예정 금액입니다. 화장품은 질병의 예방·치료를 위한 의약품이 아닙니다. 결제는 준비 중이며 가격은 확정 전입니다.</p>
@@ -464,6 +462,8 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
   const won = n => n.toLocaleString('ko-KR');
   // ── 오늘의 딜 카드. deploy/products.json(공급상품 마스터 132개 · 10-15)에서 그린다. 사진은 img/goods/<key>.webp, 가격은 DB(product_price) ──
   let GOODS = [], goodsShown = 0; const GOODS_STEP = 24;
+  // 루비 10-15 「오늘의 딜에 상품 3개만 일단 표시, 나머진 가려둬 · 삭제는 하지 말고」 — 보일 키만 적는다. 전부 보이게 하려면 null.
+  const GOODS_SHOW = ['g038', 'g089', 'g118'];
   function goodsCard(x) {
     const img = x.img ? `<img src="${x.img}" alt="${x.name}" loading="lazy" width="700" height="700">` : '';
     const tag = x.price_raw && /1\+1/.test(x.price_raw) ? '<span class="eyeb">1+1</span>' : `<span class="eyeb">${x.brand}</span>`;
@@ -479,7 +479,7 @@ body.guest .perks,body.guest #give,body.guest #goods,body.guest #vault,body.gues
     paintPrice(!!lastUser);
   }
   $('#gmorebtn').addEventListener('click', goodsMore);
-  fetch('products.json').then(r => r.json()).then(j => { GOODS = j; goodsMore(); }).catch(e => console.warn('products.json', e));
+  fetch('products.json').then(r => r.json()).then(j => { GOODS = GOODS_SHOW ? j.filter(x => GOODS_SHOW.includes(x.key)) : j; goodsMore(); }).catch(e => console.warn('products.json', e));
   let lastUser = null;
   async function paintPrice(on) {
     const slots = document.querySelectorAll('[data-price-key]');
