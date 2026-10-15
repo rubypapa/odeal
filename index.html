@@ -92,6 +92,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .price-was{font-size:15px;color:var(--ink-3);text-decoration:line-through}
 .price-now{font-size:26px;font-weight:800;color:var(--accent);letter-spacing:-.03em}
 .price-note{font-size:13.5px;color:var(--ink-2)}
+/* 「로그인하고 스탬프 받기」를 누르면 로그인 단추 칸(#auth)으로 옮겨 가며 두 번 깜빡인다 (루비 10-15 「아무 기능을 안 해」) */
+#auth:target .btn-lg{animation:odeal-pulse .7s ease 2}
+@keyframes odeal-pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,56,13,0)}50%{box-shadow:0 0 0 6px rgba(232,56,13,.35)}}
 .stock{margin-top:14px}
 .bar{height:6px;border-radius:var(--r-pill);background:var(--line);overflow:hidden}
 .bar span{display:block;height:100%;width:0;border-radius:var(--r-pill);background:var(--accent)}
@@ -291,7 +294,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
           <div class="priceline">
             <span class="price-was num">19,600원</span>
             <span class="price-now num">3,000원</span>
-            <span class="price-note">배송비 무료</span>
+            <span class="price-note">배송비 무료 (스탬프 1개 차감)</span>
           </div>
           <div class="stock hide" id="stock">
             <div class="bar"><span id="stockbar"></span></div>
@@ -577,7 +580,7 @@ body.guest .perks,body.guest #goods,body.guest .nav-links,body.guest .btn-lock,b
 
   // 버튼 하나가 상황마다 다른 말을 한다. 막힌 이유를 버튼에 그대로 적어야 다음 행동이 보인다.
   function giveAction(x, me, threshold) {
-    if (!me.signedIn)              return { label: '로그인하고 신청하기', go: '#top' };
+    if (!me.signedIn)              return { label: '로그인하고 스탬프 받기', go: '#auth' };   // 루비 10-15 · 전엔 #top 이라 눌러도 아무 일이 없었다 → 로그인 단추 칸으로
     if (me.entered.includes(x.round)) return { label: '신청 완료', done: true };
     if (x.left <= 0)               return { label: '마감', done: true };
     if (x.slot === 'next' && !me.eligible)
