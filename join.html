@@ -237,8 +237,26 @@ const Q = new URLSearchParams(location.search);
 const ADDR_MODE = Q.get('addr') === '1';
 function 로그인뒤(u){
   myId = u.id;
-  if (ADDR_MODE) { setWho(u.email || (u.user_metadata && u.user_metadata.name) || '로그인됨'); return; }
+  if (ADDR_MODE) { setWho(u.email || (u.user_metadata && u.user_metadata.name) || '로그인됨'); 배송지불러오기(); return; }
   location.replace('/');
+}
+/* 저장된 배송지가 있으면 칸을 채워 보여 주고, 저장은 수정(update)으로 간다 (10-16 루비 「내 정보 다시 들어가니까 다시 배송지 입력하라고 나오는데」). */
+let existingId = null;
+async function 배송지불러오기(){
+  if (!sb || !myId) return;
+  const { data, error } = await sb.from('shipping_address').select('*').eq('user_id', myId).order('created_at', { ascending: false }).limit(1);
+  if (error || !data || !data.length) return;
+  const r = data[0]; existingId = r.id;
+  $('#name').value = r.name || ''; $('#tel').value = r.tel || ''; $('#zip').value = r.zip || '';
+  $('#addr1').value = r.addr1 || ''; $('#addr2').value = r.addr2 || ''; $('#memo').value = r.memo || '';
+  $('#a1').checked = true; $('#a2').checked = true;                       // 등록 때 이미 동의한 필수 항목
+  $('#m1').checked = !!r.marketing_sms; $('#m2').checked = !!r.marketing_kakao; $('#m3').checked = !!r.marketing_email;
+  $('#a3').checked = $('#m1').checked || $('#m2').checked || $('#m3').checked;
+  $('#all').checked = $('#a1').checked && $('#a2').checked && $('#a3').checked;
+  $('#s2 h1').textContent = '내 배송지';
+  $('#s2 .lead').textContent = '저장된 배송지입니다. 바꿀 곳만 고치고 저장하세요.';
+  $('#submit').textContent = '이 주소로 수정';
+  check();
 }
 function 이메일로그인끝(u){ 로그인뒤(u); }
 $('#emlogin').addEventListener('click', async () => {
@@ -389,8 +407,10 @@ $('#form').addEventListener('submit', async e => {
   let saved = '이 브라우저에만 (저장소 미연결)';
   if (sb) {
     $('#submit').disabled = true; $('#submit').textContent = '저장 중...';
-    const { error } = await sb.from('shipping_address').insert(rec);
-    if (error) { alert('저장 실패: ' + error.message); $('#submit').disabled = false; $('#submit').textContent = '이 주소로 등록'; return; }
+    const { error } = existingId
+      ? await sb.from('shipping_address').update(rec).eq('id', existingId)      // 내 정보에서 고친 것 = 같은 행을 바꾼다
+      : await sb.from('shipping_address').insert(rec);
+    if (error) { alert('저장 실패: ' + error.message); $('#submit').disabled = false; $('#submit').textContent = existingId ? '이 주소로 수정' : '이 주소로 등록'; return; }
     saved = '서울 리전 데이터베이스';
   }
 
@@ -402,6 +422,7 @@ $('#form').addEventListener('submit', async e => {
   $('#r-save').textContent = saved;
   // ★4단계 전환: 배송지까지 입력한 사람 = 구매 의사가 가장 뚜렷한 층
   if (window.ODEAL_TRACK) window.ODEAL_TRACK.shipping();
+  if (existingId) $('#s3 h1').textContent = '수정됐습니다.';
   $('#donemsg').textContent = sb ? '배송지가 저장됐습니다.' : '화면 흐름 확인용입니다. 저장소를 연결하면 실제로 기록됩니다.';
   if (sb && Q.get('then') === 'give') { location.replace('/?give=1'); return; }   // 홈 「무료딜 신청」에서 온 사람 = 저장 즉시 자동 신청
   go(3);
