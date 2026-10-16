@@ -404,12 +404,7 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
     if (on) $('#navlogin').dataset.on = '1'; else delete $('#navlogin').dataset.on;
     if (!on) return;
     stamps(user).catch(e => console.warn('스탬프', e));
-    const m = user.user_metadata || {};
-    $('#whoami').textContent = m.name || m.full_name || m.nickname || m.preferred_username || '회원';
-    const pic = m.avatar_url || m.picture || m.profile_image_url || '';
-    const av = $('#ava');
-    av.classList.toggle('hide', !pic);
-    if (pic) { av.src = pic; av.referrerPolicy = 'no-referrer'; }
+    // #whoami·#ava 는 10-15 #vault 와 함께 빠졌다 — 여기서 만지면 null 로 터져 track()·뒤따르는 paintGive() 까지 멈춘다(10-16 콘솔 실측)
     track(user);
   }
 
