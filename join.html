@@ -71,6 +71,14 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
 .emailgate .row2{display:flex;gap:9px}
 .emailgate .row2 .btn{flex:1}
 .legal{margin-top:13px;font-size:12.5px;color:var(--ink-3);line-height:1.7}
+.alist{display:flex;flex-direction:column;gap:10px;margin:0 0 18px}
+.acard{border:1px solid var(--line);border-radius:10px;padding:13px 15px;display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.55}
+.acard .ainfo{flex:1;min-width:0}
+.acard .ainfo b{display:block}
+.acard .ainfo .num{color:var(--ink-2)}
+.acard .adel{flex:none;height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);background:#fff;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.acard .adel.arm{border-color:#c0392b;color:#c0392b}
+#addnew{margin-bottom:6px}
 .recap{margin-top:20px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .recap div{display:flex;gap:14px;padding:13px 15px;border-top:1px solid var(--line);font-size:14.5px}
 .recap div:first-child{border-top:0}
@@ -138,6 +146,8 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.32}
     <p id="who" class="lead hide" style="margin:0 0 14px;padding:11px 14px;background:var(--page);border-radius:10px;font-size:14px"></p>
     <h1>어디로 보낼까요?</h1>
     <p class="lead">배송에만 쓰고, 법에서 정한 기간까지만 보관합니다.</p>
+    <div class="alist hide" id="alist"></div>
+    <button class="btn btn-lg btn-primary hide" type="button" id="addnew">새 주소 추가</button>
     <form id="form" novalidate>
       <div class="f"><label for="name">받는 분 <em>*</em></label>
         <input class="in" id="name" autocomplete="name" placeholder="이름" required>
@@ -240,24 +250,35 @@ function 로그인뒤(u){
   if (ADDR_MODE) { setWho(u.email || (u.user_metadata && u.user_metadata.name) || '로그인됨'); 배송지불러오기(); return; }
   location.replace('/');
 }
-/* 저장된 배송지가 있으면 칸을 채워 보여 주고, 저장은 수정(update)으로 간다 (10-16 루비 「내 정보 다시 들어가니까 다시 배송지 입력하라고 나오는데」). */
-let existingId = null;
+/* 내 정보 = 저장된 배송지 목록(읽기 전용) + 「삭제」 + 「새 주소 추가」. 기존 주소는 고치지 못한다
+   (10-16 루비 「기존 정보는 수정할 수 없는 상태로 두고 원하면 눌러서 삭제하거나 새 주소를 추가하는 방식으로」). */
 async function 배송지불러오기(){
   if (!sb || !myId) return;
-  const { data, error } = await sb.from('shipping_address').select('*').eq('user_id', myId).order('created_at', { ascending: false }).limit(1);
-  if (error || !data || !data.length) return;
-  const r = data[0]; existingId = r.id;
-  $('#name').value = r.name || ''; $('#tel').value = r.tel || ''; $('#zip').value = r.zip || '';
-  $('#addr1').value = r.addr1 || ''; $('#addr2').value = r.addr2 || ''; $('#memo').value = r.memo || '';
-  $('#a1').checked = true; $('#a2').checked = true;                       // 등록 때 이미 동의한 필수 항목
-  $('#m1').checked = !!r.marketing_sms; $('#m2').checked = !!r.marketing_kakao; $('#m3').checked = !!r.marketing_email;
-  $('#a3').checked = $('#m1').checked || $('#m2').checked || $('#m3').checked;
-  $('#all').checked = $('#a1').checked && $('#a2').checked && $('#a3').checked;
+  const { data, error } = await sb.from('shipping_address').select('id,name,tel,zip,addr1,addr2,memo,created_at').eq('user_id', myId).order('created_at', { ascending: false });
+  const rows = (!error && data) ? data : [];
+  const list = $('#alist'), add = $('#addnew');
+  if (!rows.length) {                                   // 저장된 주소가 없으면 전과 같이 빈 폼
+    list.classList.add('hide'); add.classList.add('hide'); $('#form').classList.remove('hide'); return;
+  }
   $('#s2 h1').textContent = '내 배송지';
-  $('#s2 h1 + .lead').textContent = '저장된 배송지입니다. 바꿀 곳만 고치고 저장하세요.';
-  $('#submit').textContent = '이 주소로 수정';
-  check();
+  $('#s2 h1 + .lead').textContent = '저장된 배송지입니다. 삭제하거나 새 주소를 추가할 수 있습니다.';
+  list.innerHTML = rows.map(r => `<div class="acard" data-id="${r.id}"><div class="ainfo"><b>${esc(r.name)} <span class="num">${esc(r.tel)}</span></b>${r.zip ? '(' + esc(r.zip) + ') ' : ''}${esc(r.addr1)} ${esc(r.addr2 || '')}${r.memo ? '<br><span class="num">메모 · ' + esc(r.memo) + '</span>' : ''}</div><button class="adel" type="button">삭제</button></div>`).join('');
+  list.classList.remove('hide'); add.classList.remove('hide'); $('#form').classList.add('hide');
+  list.querySelectorAll('.adel').forEach(b => b.addEventListener('click', async () => {
+    // 두 번 눌러야 지워진다 — 첫 번째는 「정말 삭제」로 바뀌기만
+    if (!b.classList.contains('arm')) { b.classList.add('arm'); b.textContent = '정말 삭제'; setTimeout(() => { b.classList.remove('arm'); b.textContent = '삭제'; }, 4000); return; }
+    b.disabled = true; b.textContent = '삭제 중...';
+    const id = b.closest('.acard').dataset.id;
+    const { error } = await sb.from('shipping_address').delete().eq('id', id);
+    if (error) { alert('삭제 실패: ' + error.message); b.disabled = false; b.classList.remove('arm'); b.textContent = '삭제'; return; }
+    배송지불러오기();
+  }));
 }
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+$('#addnew').addEventListener('click', () => {
+  $('#addnew').classList.add('hide'); $('#form').classList.remove('hide');
+  $('#name').focus(); $('#form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 function 이메일로그인끝(u){ 로그인뒤(u); }
 $('#emlogin').addEventListener('click', async () => {
   const v = 이메일값(); if (!v || !sb) return;
@@ -407,10 +428,8 @@ $('#form').addEventListener('submit', async e => {
   let saved = '이 브라우저에만 (저장소 미연결)';
   if (sb) {
     $('#submit').disabled = true; $('#submit').textContent = '저장 중...';
-    const { error } = existingId
-      ? await sb.from('shipping_address').update(rec).eq('id', existingId)      // 내 정보에서 고친 것 = 같은 행을 바꾼다
-      : await sb.from('shipping_address').insert(rec);
-    if (error) { alert('저장 실패: ' + error.message); $('#submit').disabled = false; $('#submit').textContent = existingId ? '이 주소로 수정' : '이 주소로 등록'; return; }
+    const { error } = await sb.from('shipping_address').insert(rec);
+    if (error) { alert('저장 실패: ' + error.message); $('#submit').disabled = false; $('#submit').textContent = '이 주소로 등록'; return; }
     saved = '서울 리전 데이터베이스';
   }
 
@@ -422,7 +441,6 @@ $('#form').addEventListener('submit', async e => {
   $('#r-save').textContent = saved;
   // ★4단계 전환: 배송지까지 입력한 사람 = 구매 의사가 가장 뚜렷한 층
   if (window.ODEAL_TRACK) window.ODEAL_TRACK.shipping();
-  if (existingId) $('#s3 h1').textContent = '수정됐습니다.';
   $('#donemsg').textContent = sb ? '배송지가 저장됐습니다.' : '화면 흐름 확인용입니다. 저장소를 연결하면 실제로 기록됩니다.';
   if (sb && Q.get('then') === 'give') { location.replace('/?give=1'); return; }   // 홈 「무료딜 신청」에서 온 사람 = 저장 즉시 자동 신청
   go(3);
