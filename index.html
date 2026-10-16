@@ -268,7 +268,7 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
         <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208 80h-32V56a48 48 0 0 0-96 0v24H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16ZM96 56a32 32 0 0 1 64 0v24H96Zm112 152H48V96h160Z"/></svg>
         회원 전용관
       </a>
-      <a class="btn btn-sm btn-ghost hide" href="join.html?addr=1" id="navme">내 정보</a>
+      <a class="btn btn-sm btn-ghost hide" href="join.html?addr=1" id="navme" data-fresh="1">내 정보</a>
       <a class="btn btn-sm btn-ghost" href="join.html" id="navlogin">로그인</a>
     </div>
   </div>
@@ -569,7 +569,7 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
       b.addEventListener('click', () => onGive(+b.dataset.giveRound)));
     box.querySelectorAll('[data-ask]').forEach(b => b.addEventListener('click', () => {
       box.innerHTML = `<p class="askq">배송지를 입력하시겠습니까?</p><p class="gnote">무료딜을 받으려면 보낼 곳이 필요합니다. 한 번만 입력하면 다음부터는 바로 신청됩니다.</p>
-        <div class="askbtns"><a class="gbtn" href="join.html?addr=1&then=give">입력하기</a><button class="gbtn ghost" type="button" data-later="1">나중에</button></div>`;
+        <div class="askbtns"><a class="gbtn" href="join.html?addr=1&then=give" data-fresh="1">입력하기</a><button class="gbtn ghost" type="button" data-later="1">나중에</button></div>`;
       box.querySelector('[data-later]').addEventListener('click', paintGive);
     }));
     // 배송지 화면에서 저장하고 돌아온 사람(/?give=1) = 바로 신청
@@ -620,6 +620,11 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
   });
   sb.auth.onAuthStateChange((_e, s) => { paint(s && s.user); paintPrice(!!(s && s.user)); paintGive(); dropProviderToken(); });
 })();
+  // 배송지 화면 링크는 매번 새로 받는다 — GitHub Pages 가 HTML 을 10분(max-age=600) 캐시해 고친 join.html 이 옛 판으로 뜬 적 있음(10-16)
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[data-fresh]'); if (!a) return;
+    e.preventDefault(); location.href = a.getAttribute('href') + '&v=' + Date.now();
+  });
 </script>
 
 </body>

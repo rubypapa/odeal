@@ -254,7 +254,7 @@ async function 배송지불러오기(){
   $('#a3').checked = $('#m1').checked || $('#m2').checked || $('#m3').checked;
   $('#all').checked = $('#a1').checked && $('#a2').checked && $('#a3').checked;
   $('#s2 h1').textContent = '내 배송지';
-  $('#s2 .lead').textContent = '저장된 배송지입니다. 바꿀 곳만 고치고 저장하세요.';
+  $('#s2 h1 + .lead').textContent = '저장된 배송지입니다. 바꿀 곳만 고치고 저장하세요.';
   $('#submit').textContent = '이 주소로 수정';
   check();
 }
