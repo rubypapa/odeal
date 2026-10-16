@@ -46,6 +46,13 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
   text-decoration:underline;text-underline-offset:4px}
 .hide{display:none}
 #payment-method,#agreement{margin-top:18px}
+.addr h2{margin:0 0 10px;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.addr .prow{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;line-height:1.5;cursor:pointer;margin-top:8px}
+.addr .prow:has(input:checked){border-color:var(--accent)}
+.addr .prow input{margin-top:3px;accent-color:var(--accent)}
+.addr .prow b{display:block}
+.addr .add{display:inline-block;margin-top:12px;font-size:13.5px;font-weight:700;color:var(--accent);text-decoration:underline;text-underline-offset:4px}
+.addr .none{font-size:14px;color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -61,6 +68,7 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
 
   <div id="shop" class="hide">
     <div class="box" id="items"></div>
+    <div class="box addr" id="addr"><h2>배송지</h2><p class="none">불러오는 중...</p></div>
     <div class="box sum" id="sum"></div>
     <div id="payment-method"></div>
     <div id="agreement"></div>
@@ -82,7 +90,22 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
   const sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON);
 
   const NAMES = { p7: '파머시안 PDRN 7000 크림', mel: '파머시안 멜라리스 100,000 크림', nmn: '파머시안 NMN 30,000 크림' };
-  let rows = [], qty = {}, ship = 0, widgets = null, user = null;
+  let rows = [], qty = {}, ship = 0, widgets = null, user = null, addrs = [];
+  const escH = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const selectedAddr = () => { const s = document.querySelector('input[name="addr"]:checked'); return s ? s.value : null; };
+  // 배송지 고르기 (루비 10-16 「상품을 구매할 때도 배송지를 선택 · 입력 안 했다면 입력하도록」). 최근 주소가 먼저 · 기본 선택.
+  async function drawAddr() {
+    const { data } = await sb.from('shipping_address').select('id,name,tel,zip,addr1,addr2').order('created_at', { ascending: false });
+    addrs = data || [];
+    const add = `<a class="add" href="join.html?addr=1&then=pay&v=${Date.now()}">${addrs.length ? '새 주소 추가' : '배송지 입력하기'}</a>`;
+    $('#addr').innerHTML = '<h2>배송지</h2>' + (addrs.length
+      ? addrs.map((r, i) => `<label class="prow"><input type="radio" name="addr" value="${r.id}"${i === 0 ? ' checked' : ''}><span><b>${escH(r.name)} ${escH(r.tel)}</b>${r.zip ? '(' + escH(r.zip) + ') ' : ''}${escH(r.addr1)} ${escH(r.addr2 || '')}</span></label>`).join('')
+      : '<p class="none">등록된 배송지가 없습니다. 보낼 곳을 먼저 입력해 주세요.</p>') + add;
+    $('#addr').querySelectorAll('input[name="addr"]').forEach(i => i.addEventListener('change', drawSum));
+  }
+  const QKEY = 'odeal_qty';
+  function saveQty() { try { sessionStorage.setItem(QKEY, JSON.stringify(qty)); } catch (_) {} }
+  function loadQty() { try { return JSON.parse(sessionStorage.getItem(QKEY) || '{}'); } catch (_) { return {}; } }
 
   const goods = () => rows.reduce((s, r) => s + r.price * (qty[r.key] || 0), 0);
   const count = () => rows.reduce((s, r) => s + (qty[r.key] || 0), 0);
@@ -103,7 +126,7 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
       const k = b.dataset.k, d = +b.dataset.d;
       const before = qty[k] || 0;
       qty[k] = Math.max(0, Math.min(20, before + d));
-      $('#q-' + k).value = qty[k];
+      $('#q-' + k).value = qty[k]; saveQty();
       // ★5단계 전환: 0에서 1로 올라간 순간이 '담았다'이다
       if (before === 0 && qty[k] === 1 && window.ODEAL_TRACK) {
         const r = rows.find(x => x.key === k);
@@ -119,7 +142,7 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
       <div><span>상품 금액</span><span class="num">${won(goods())}원</span></div>
       <div><span>배송비</span><span class="num">${n ? won(ship) + '원' : '-'}</span></div>
       <div class="tot"><span>결제 예정 금액</span><span class="num">${won(total())}원</span></div>`;
-    $('#pay').disabled = n === 0 || !widgets;
+    $('#pay').disabled = n === 0 || !widgets || !selectedAddr();
     if (widgets && n) widgets.setAmount({ currency: 'KRW', value: total() });
   }
 
@@ -141,7 +164,9 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
     if (error || !data || !data.length) { $('#items').textContent = '가격을 불러오지 못했습니다.'; return; }
     rows = data.sort((a, b) => a.key.localeCompare(b.key));
     ship = rows[0].ship;
-    rows.forEach(r => qty[r.key] = 0);
+    const kept = loadQty();
+    rows.forEach(r => qty[r.key] = Math.max(0, Math.min(20, +kept[r.key] || 0)));   // 주소 추가하러 갔다 와도 담은 수량 유지
+    await drawAddr();
     drawItems(); drawSum();
 
     if (window.__notoss || !window.TossPayments) { $('#note').textContent = '결제 모듈을 불러오지 못했습니다.'; return; }
@@ -162,10 +187,11 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.04em}
       const res = await fetch(`${C.SUPABASE_URL}/functions/v1/order-create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, address_id: selectedAddr() }),
       });
       const order = await res.json();
-      if (!res.ok) throw new Error(order.error || '주문 생성 실패');
+      if (!res.ok) throw new Error(order.reason === 'need_address' ? '배송지를 골라 주세요.' : (order.error || '주문 생성 실패'));
+      saveQty();
       if (window.ODEAL_TRACK) window.ODEAL_TRACK.beginCheckout({ value: order.amount, orderId: order.orderId });
 
       const first = NAMES[items[0].key] || 'ODEAL 주문';

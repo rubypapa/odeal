@@ -196,6 +196,11 @@ footer div{max-width:1140px;margin:0 auto}
 .hero-cta .gnote[hidden]{display:none}
 .hero-cta .askq{margin-top:14px;font-size:15px;font-weight:800;letter-spacing:-.02em}
 .hero-cta .askbtns{display:flex;gap:8px;margin-top:10px}.hero-cta .askbtns .gbtn{flex:1;margin-top:0}
+.hero-cta .pick{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.hero-cta .prow{display:flex;gap:9px;align-items:flex-start;padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:13px;line-height:1.5;cursor:pointer;background:#fff}
+.hero-cta .prow:has(input:checked){border-color:var(--accent)}
+.hero-cta .prow input{margin-top:3px;accent-color:var(--accent)}
+.hero-cta .prow b{display:block}
 .gbtn{align-self:flex-start;margin-top:16px;min-height:44px;padding:10px 20px;line-height:1.35;border:0;border-radius:11px;
   background:var(--ink);color:#fff;font:inherit;font-size:14.5px;font-weight:700;letter-spacing:-.02em;cursor:pointer}
 .gbtn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
@@ -531,12 +536,12 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
   //   서버(functions/v1/giveaway)가 원장을 읽어 판정하고, 이 코드는 그 결과를 그리기만 한다.
   let giveState = null;
 
-  async function askGive(action, round) {
+  async function askGive(action, round, address_id) {
     const { data: { session } } = await sb.auth.getSession();
     const h = { 'Content-Type': 'application/json' };
     if (session) h.Authorization = `Bearer ${session.access_token}`;
     const res = await fetch(`${C.SUPABASE_URL}/functions/v1/giveaway`, {
-      method: 'POST', headers: h, body: JSON.stringify({ action, round }),
+      method: 'POST', headers: h, body: JSON.stringify({ action, round, address_id }),
     });
     return { ok: res.ok, body: await res.json() };
   }
@@ -566,17 +571,36 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
         : `<a class="gbtn ghost" href="${a.go}">${a.label}</a>`;
     box.innerHTML = btn + `<p class="gnote"${a.note ? '' : ' hidden'}>${a.note || ''}</p>`;
     box.querySelectorAll('[data-give-round]').forEach(b =>
-      b.addEventListener('click', () => onGive(+b.dataset.giveRound)));
+      b.addEventListener('click', () => pickAddress(+b.dataset.giveRound)));
     box.querySelectorAll('[data-ask]').forEach(b => b.addEventListener('click', () => {
       box.innerHTML = `<p class="askq">배송지를 입력하시겠습니까?</p><p class="gnote">무료딜을 받으려면 보낼 곳이 필요합니다. 한 번만 입력하면 다음부터는 바로 신청됩니다.</p>
         <div class="askbtns"><a class="gbtn" href="join.html?addr=1&then=give" data-fresh="1">입력하기</a><button class="gbtn ghost" type="button" data-later="1">나중에</button></div>`;
       box.querySelector('[data-later]').addEventListener('click', paintGive);
     }));
-    // 배송지 화면에서 저장하고 돌아온 사람(/?give=1) = 바로 신청
+    // 배송지 화면에서 저장하고 돌아온 사람(/?give=1) = 방금 저장한(가장 새) 주소로 바로 신청
     if (new URLSearchParams(location.search).get('give') === '1') {
       history.replaceState(null, '', '/');
-      const b = box.querySelector('[data-give-round]'); if (b) b.click();
+      if (a.act) { const list = await myAddresses(); if (list.length) onGive(nowR.round, list[0].id); }
     }
+  }
+  const escH = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  async function myAddresses() {
+    const { data } = await sb.from('shipping_address').select('id,name,tel,zip,addr1,addr2').order('created_at', { ascending: false });
+    return data || [];
+  }
+  // 신청 전에 보낼 곳을 고른다 (루비 10-16 「무료딜 참여했을 때도 배송지를 선택할 수 있는 옵션」). 최근 주소가 먼저 · 기본 선택.
+  async function pickAddress(round) {
+    const box = $('#herocta');
+    const list = await myAddresses();
+    if (!list.length) { await paintGive(); const b = box.querySelector('[data-ask]'); if (b) b.click(); return; }   // 없으면 입력 물음
+    box.innerHTML = `<p class="askq">어디로 보낼까요?</p><div class="pick">${list.map((r, i) =>
+        `<label class="prow"><input type="radio" name="giveaddr" value="${r.id}"${i === 0 ? ' checked' : ''}><span><b>${escH(r.name)} ${escH(r.tel)}</b>${r.zip ? '(' + escH(r.zip) + ') ' : ''}${escH(r.addr1)} ${escH(r.addr2 || '')}</span></label>`).join('')}</div>
+      <div class="askbtns"><button class="gbtn" type="button" data-go-round="${round}">이 주소로 신청</button><a class="gbtn ghost" href="join.html?addr=1&then=give" data-fresh="1">새 주소 추가</a></div>
+      <p class="gnote" hidden></p>`;
+    box.querySelector('[data-go-round]').addEventListener('click', () => {
+      const sel = box.querySelector('input[name="giveaddr"]:checked');
+      onGive(round, sel ? sel.value : null, box.querySelector('[data-go-round]'));
+    });
   }
 
   // 버튼 하나가 상황마다 다른 말을 한다. 막힌 이유를 버튼에 그대로 적어야 다음 행동이 보인다.
@@ -592,11 +616,11 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
   }
 
 
-  async function onGive(round) {
-    const btn = $(`[data-give-round="${round}"]`);
+  async function onGive(round, addressId, btn) {
+    btn = btn || $(`[data-give-round="${round}"]`);
     if (btn) { btn.disabled = true; btn.textContent = '신청 중...'; }
     let r;
-    try { r = await askGive('enter', round); }
+    try { r = await askGive('enter', round, addressId); }
     catch (_) { if (btn) { btn.disabled = false; btn.textContent = '다시 시도'; } return; }
     if (r.ok && r.body.ok) {
       // ★7단계 전환: 나눔에 응모한 사람. 결제 퍼널과 별개 축으로 잡는다.
@@ -605,7 +629,7 @@ body.guest .hero-right,body.guest .perks,body.guest #goods,body.guest .nav-links
       return;
     }
     const why = {
-      signin: '로그인이 필요합니다.', need_address: '배송지를 먼저 등록해 주세요.',
+      signin: '로그인이 필요합니다.', need_address: '배송지를 골라 주세요.',
       already: '이미 신청하셨습니다.', soldout: '수량이 모두 나갔습니다.',
       closed: '마감된 회차입니다.', not_eligible: '아직 예약 자격이 아닙니다.',
     }[r.body && r.body.reason] || '신청하지 못했습니다.';
